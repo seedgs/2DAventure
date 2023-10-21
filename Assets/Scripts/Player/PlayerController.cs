@@ -7,6 +7,7 @@ using UnityEngine.PlayerLoop;
 public class PlayerController : MonoBehaviour
 {
     // Start is called before the first frame update
+    //æµ‹è¯•æµ‹è¯•æµ‹è¯•æµ‹è¯•æµ‹è¯•æµ‹è¯•æµ‹è¯•
     void Start()
     {
         
@@ -14,16 +15,16 @@ public class PlayerController : MonoBehaviour
 
     // Update is called once per frame
 
-    //Ã¿Ò»Ö¡¶¼¼á³Ö°´¼üµÄÊäÈë
+    //Ã¿Ò»Ö¡ï¿½ï¿½ï¿½ï¿½Ö°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     void Update()
     {
-        //»ñÈ¡inputControlÀïÃæµÄ GamePalyer ÀïÃæµÄ Move µÄ Vector2 ´æ½øinputDirection£¬µ«ÊÇÕâ¸öVector2ÐèÒªReadValue
+        //ï¿½ï¿½È¡inputControlï¿½ï¿½ï¿½ï¿½ï¿½ GamePalyer ï¿½ï¿½ï¿½ï¿½ï¿½ Move ï¿½ï¿½ Vector2 ï¿½ï¿½ï¿½inputDirectionï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Vector2ï¿½ï¿½ÒªReadValue
 
         inputDirection = inputControl.GamePlayer.Move.ReadValue<Vector2>();
     }
 
-    //»ñÈ¡ PlayerInputControl(ÊäÈëÉè±¸)£¬´æ½øinputControl
-    //PlayerInputControlÔÚSeetingsÎÄ¼þ¼ÐÀïÃæµÄInputSystemÎÄ¼þÀïÃæ
+    //ï¿½ï¿½È¡ PlayerInputControl(ï¿½ï¿½ï¿½ï¿½ï¿½è±¸)ï¿½ï¿½ï¿½ï¿½ï¿½inputControl
+    //PlayerInputControlï¿½ï¿½Seetingsï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½InputSystemï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
     public PlayerInputControl inputControl;
     public Vector2 inputDirection;
     public float speed;
@@ -37,17 +38,17 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    //µ±Ç°ÎïÌåÆô¶¯µÄÊ±ºò
+    //ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
     private void OnEnable()
     {
-        //¿ØÖÆÆ÷Ò²Æô¶¯ÆðÀ´
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         inputControl.Enable();
     }
 
-    //µ±Ç°ÎïÌå¹Ø±ÕµÄÊ±ºò
+    //ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Ø±Õµï¿½Ê±ï¿½ï¿½
     private void OnDisable()
     {
-        //¿ØÖÆÆ÷Ò²¸ú×Å¹Ø±Õ
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½Å¹Ø±ï¿½
         inputControl.Disable();
     }
 
@@ -60,8 +61,8 @@ public class PlayerController : MonoBehaviour
     {
         rb.velocity = new Vector2(inputDirection.x * speed * Time.deltaTime, rb.velocity.y);
 
-        //·½·¨1
-        //Õâ¸ö·½·¨ÊÇÓÃÁËSprite RendererÀïÃæµÄFlipµÄXÖáÊÇ±»µãÑ¡£¨Ò²¾ÍÊÇ²¼¶ûÖµµÄTrueºÍFlase£©À´ÅÐ¶Ï
+        //ï¿½ï¿½ï¿½ï¿½1
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Sprite Rendererï¿½ï¿½ï¿½ï¿½ï¿½Flipï¿½ï¿½Xï¿½ï¿½ï¿½Ç±ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½Ò²ï¿½ï¿½ï¿½Ç²ï¿½ï¿½ï¿½Öµï¿½ï¿½Trueï¿½ï¿½Flaseï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
         if(inputDirection.x > 0)
         {
             sp.flipX = false;
@@ -79,24 +80,24 @@ public class PlayerController : MonoBehaviour
 
         /*
   
-        //·½·¨2
-        //Õâ¸öÊÇ³£¹æ¸Ä±ä·­×ªxµÄ·½·¨
-        //ÎÒÃÇÐèÒªFaceDirÊÇÕûÊýÀàÐÍ£¬ËùÒÔÉèÎªintÊý¾ÝÀàÐÍ£¬µ«ÊÇlocalScale.xÊÇfloat¸¡µãÀàÐÍ£¬ËùÒÔÐèÒªÇ¿ÖÆ×ª»»³Éint
+        //ï¿½ï¿½ï¿½ï¿½2
+        //ï¿½ï¿½ï¿½ï¿½Ç³ï¿½ï¿½ï¿½Ä±ä·­×ªxï¿½Ä·ï¿½ï¿½ï¿½
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªFaceDirï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªintï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½localScale.xï¿½ï¿½floatï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÇ¿ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½int
         int FaceDir = (int)transform.localScale.x;
 
-        //µ±inputDirection.x > 0 Ê±ÎÒÃÇÊµÔÚ°´·½ÏòÓÒ¼ü£¬´ËÊ±µÂFaceDirÎª1
+        //ï¿½ï¿½inputDirection.x > 0 Ê±ï¿½ï¿½ï¿½ï¿½Êµï¿½Ú°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¼ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½FaceDirÎª1
         if (inputDirection.x > 0)
         {
             FaceDir = 1;
-            //µ±inputDirection.x < 0 Ê±ÎÒÃÇÊµÔÚ°´·½ÏòÓÒ¼ü£¬´ËÊ±µÂFaceDirÎª-1
+            //ï¿½ï¿½inputDirection.x < 0 Ê±ï¿½ï¿½ï¿½ï¿½Êµï¿½Ú°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¼ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½FaceDirÎª-1
         }
         else if(inputDirection.x < 0)
         {
             FaceDir = -1;
         }
 
-        //ÒªÏëÈËÎï¸ù¾ÝÊä³öÉè±¸£¨¼üÅÌ¡¢ÊÖ±ú£©ÊµÏÖ·­×ª£¬Ë¼Â·ÊÇ°ÑÈËÎïÑØ×ÅxÖá·­×ª£¬ËùÒÔÏÈÒª»ñÈ¡µ½tranformÀïÃæµÄScaleµÄxÖá×é¼þ
-        //ÏÂÃæ¾ÍÊÇ»ñÈ¡µ½Scale£¨Ðý×ª£©µÄ×é¼þ£¬xÖáÊÇ-1»òÕß1µÄÊ±ºòÊÇ¾µÏñ·­×ªµÄ£¬ËùÒÔÒª¸Ä±äxÖáµÄÊýÖµ£¬ÎÒÃÇÉèÎªFackDir£¬ÆäËûµÄy¡¢z±£³Ö²»±ä
+        //Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½Ì¡ï¿½ï¿½Ö±ï¿½ï¿½ï¿½Êµï¿½Ö·ï¿½×ªï¿½ï¿½Ë¼Â·ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½á·­×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½È¡ï¿½ï¿½tranformï¿½ï¿½ï¿½ï¿½ï¿½Scaleï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç»ï¿½È¡ï¿½ï¿½Scaleï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½-1ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½×ªï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Ä±ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÎªFackDirï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½yï¿½ï¿½zï¿½ï¿½ï¿½Ö²ï¿½ï¿½ï¿½
         transform.localScale = new Vector3(FaceDir, 1, 1);
 
         */
