@@ -7,7 +7,7 @@ using UnityEngine.PlayerLoop;
 public class PlayerController : MonoBehaviour
 {
     // Start is called before the first frame update
-    //测试测试测试测试测试测试测试
+    //测试
     void Start()
     {
         
