@@ -29,6 +29,10 @@ public class PlayerController : MonoBehaviour
     public PlayerInputControl inputControl;
 
     public Vector2 inputDirection;
+
+    //需要获得别的组件，就创建这个组件对应的类型，一个变量
+    //需要获得PhysicsCheckl里面的东西，组件名+变量（命名随意）
+    private PhysicsCheck physicsCheck;
     
     public Rigidbody2D rb;
 
@@ -43,6 +47,9 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         inputControl = new PlayerInputControl();
+
+        //获取physicsCheck组件
+        physicsCheck = GetComponent<PhysicsCheck>();
         //started那就按下那一刻
         //把Jump这个函数方法添加到你按键按下的按键按下的那一刻（started）里面执行
         inputControl.GamePlayer.Jump.started += Jump;
@@ -112,6 +119,10 @@ public class PlayerController : MonoBehaviour
     }
     private void Jump(InputAction.CallbackContext context)
     {
+
+
+        if (physicsCheck.isGround)
+
         //Debug.Log("Jump");
         rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
     }
