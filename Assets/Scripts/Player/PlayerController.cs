@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine.PlayerLoop;
 public class PlayerController : MonoBehaviour
 {
     // Start is called before the first frame update
-    //测试
+    //测试测试测试测试测试
     void Start()
     {
         
@@ -23,20 +24,37 @@ public class PlayerController : MonoBehaviour
         inputDirection = inputControl.GamePlayer.Move.ReadValue<Vector2>();
     }
 
+
+    public PhysicsCheck physicsCheck;
+
     //获取 PlayerInputControl(输入设备)，存进inputControl
     //PlayerInputControl在Seetings文件夹里面的InputSystem文件里面
     public PlayerInputControl inputControl;
+
     public Vector2 inputDirection;
-    public float speed;
+    
     public Rigidbody2D rb;
+
     public SpriteRenderer sp;
+    //title命名
+    [Header("基本参数")]
+    public float speed;
+
+    public float jumpForce;
 
     private void Awake()
     {
+        rb = GetComponent<Rigidbody2D>();
         inputControl = new PlayerInputControl();
-        
+        //started那就按下那一刻
+        //把Jump这个函数方法添加到你按键按下的按键按下的那一刻（started）里面执行
+        inputControl.GamePlayer.Jump.started += Jump;
+
+        physicsCheck = GetComponent<PhysicsCheck>();
     }
 
+    //跳跃方法
+    
 
     //当前物体启动的时候
     private void OnEnable()
@@ -57,6 +75,7 @@ public class PlayerController : MonoBehaviour
         Move();
     }
 
+    //移动方法
     public void Move()
     {
         rb.velocity = new Vector2(inputDirection.x * speed * Time.deltaTime, rb.velocity.y);
@@ -71,12 +90,6 @@ public class PlayerController : MonoBehaviour
         {
             sp.flipX = true;
         }
-
-
-
-
-
-
 
         /*
   
@@ -101,6 +114,12 @@ public class PlayerController : MonoBehaviour
         transform.localScale = new Vector3(FaceDir, 1, 1);
 
         */
+    }
+    private void Jump(InputAction.CallbackContext context)
+    {
+        //Debug.Log("Jump");
+        if(physicsCheck.IsGround)
+        rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
     }
 
 
