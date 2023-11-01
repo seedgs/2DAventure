@@ -26,7 +26,8 @@ public class PhysicsCheck : MonoBehaviour
 
     //绘制碰撞半径方法
     private void OnDrawGizmos()
-    {   //DrawWireSphere是绘制一个圆（半径，半径长度）
+    {
+        //DrawWireSphere是绘制一个圆（半径，半径长度）
         Gizmos.DrawWireSphere((Vector2)transform.position + Offset, CheckRadius);
     }
 
