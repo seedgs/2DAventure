@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     //测试测试测试测试测试
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -41,6 +41,10 @@ public class PlayerController : MonoBehaviour
     [Header("基本参数")]
     public float speed;
 
+    private float runSpeed ;
+
+    private float walkSpeed ;
+
     public float jumpForce;
 
     private void Awake()
@@ -53,10 +57,38 @@ public class PlayerController : MonoBehaviour
         //started那就按下那一刻
         //把Jump这个函数方法添加到你按键按下的按键按下的那一刻（started）里面执行
         inputControl.GamePlayer.Jump.started += Jump;
+
+
+        //跑步与走路切换
+        #region
+
+        //在Awake函数里面写是因为，Awake函数在游戏对象开启后就会执行，如果游戏对象关闭后再执行，Awake也会再次开启
+        runSpeed = speed;
+
+        walkSpeed = speed / 2.5f;
+        //ctx为回调函数
+        //performed为按下按键
+        inputControl.GamePlayer.Walkbutton.performed += ctx =>
+        {
+            if (physicsCheck.isGround)
+            {
+                speed = walkSpeed;
+            }
+        };
+
+        //canceled为松开按键
+        inputControl.GamePlayer.Walkbutton.canceled += ctx =>
+        {
+            if (physicsCheck.isGround)
+            {
+                speed = runSpeed;
+            }
+        };
+        #endregion
     }
 
     //跳跃方法
-    
+
 
     //当前物体启动的时候
     private void OnEnable()
@@ -117,12 +149,17 @@ public class PlayerController : MonoBehaviour
 
         */
     }
+
+
+
+    //给人物跳跃，但是不是一直不停往上跳，需要在上的方向上施加一个力
     private void Jump(InputAction.CallbackContext context)
     {
 
-
+        //physicsCheck.isGround：检测地面碰撞
         if (physicsCheck.isGround)
 
+        //在面上施加一个力
         //Debug.Log("Jump");
         rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
     }
