@@ -30,13 +30,14 @@ public class PlayerAnimation : MonoBehaviour
         anim.SetFloat("VelocityX", Mathf.Abs(rb.velocity.x));
 
         //攻击动画
-        if (Input.GetKey(KeyCode.F))
+        
+        if (Input.GetKeyDown(KeyCode.F))
         {
             //按下F按键，执行攻击动画
             Atk = true;
             //Debug.Log("1");
         }
-        else 
+        else if(Input.GetKeyUp(KeyCode.F))
         {
             //抬起F按键，结束攻击动画
             Atk = false;

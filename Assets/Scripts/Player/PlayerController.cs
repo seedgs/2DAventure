@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
     public SpriteRenderer sp;
     //title命名
     [Header("基本参数")]
-    public float speed;
+    private float speed;
 
     private float runSpeed;
 
@@ -61,6 +61,31 @@ public class PlayerController : MonoBehaviour
         inputControl.GamePlayer.Jump.started += Jump;
 
         physicsCheck = GetComponent<PhysicsCheck>();
+
+
+
+        //攻击判定
+        #region
+        //当按下F按钮的时候，移动为0
+        inputControl.GamePlayer.Attack.performed += ctx =>
+        {
+            if (physicsCheck.IsGround)
+            {
+                speed = 0f;
+            }
+            
+        };
+
+        //当按下F按钮的时候，移动为恢复（此处恢复为290f）
+        inputControl.GamePlayer.Attack.canceled += ctx =>
+        {
+            if (physicsCheck.IsGround)
+            {
+                speed = 290f;
+            }
+            
+        };
+        #endregion
 
 
         //走路与跑步切换
