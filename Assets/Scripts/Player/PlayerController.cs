@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    //方法
+    #region
     public PhysicsCheck physicsCheck;
 
     //获取 PlayerInputControl(输入设备)，存进inputControl
@@ -40,7 +42,15 @@ public class PlayerController : MonoBehaviour
     [Header("基本参数")]
     public float speed;
 
+    private float runSpeed;
+
+    private float walkSpeed;
+
     public float jumpForce;
+
+    #endregion
+
+
 
     private void Awake()
     {
@@ -51,10 +61,43 @@ public class PlayerController : MonoBehaviour
         inputControl.GamePlayer.Jump.started += Jump;
 
         physicsCheck = GetComponent<PhysicsCheck>();
+
+
+        //走路与跑步切换
+        #region
+        //走路为速度时的约1/2.5倍
+        walkSpeed = speed / 2.5f;
+
+        //跑步就是速度的数值
+        runSpeed = speed;
+
+        //获取控制中控制走路的组件，在“按下”(performed)的时候,调用回调函数(+= ctx =>)
+        //回调函数检测人物碰撞地面后开始执行
+        //“按下”后为走路模式
+        inputControl.GamePlayer.Walkbutton.performed += ctx =>
+        {
+            if (physicsCheck.IsGround)
+            {
+                speed = walkSpeed;
+            }
+        };
+
+
+        //获取控制中控制走路的组件，在“松开”(canceled)的时候,调用回调函数(+= ctx =>)
+        //回调函数检测人物碰撞地面后开始执行
+        //“松开”后为跑步模式
+        inputControl.GamePlayer.Walkbutton.canceled += ctx =>
+        {
+            if (physicsCheck.IsGround)
+            {
+                speed = runSpeed;
+            }
+        };
+        #endregion
     }
 
     //跳跃方法
-    
+
 
     //当前物体启动的时候
     private void OnEnable()
@@ -63,6 +106,7 @@ public class PlayerController : MonoBehaviour
         inputControl.Enable();
     }
 
+
     //当前物体关闭的时候
     private void OnDisable()
     {
@@ -70,12 +114,15 @@ public class PlayerController : MonoBehaviour
         inputControl.Disable();
     }
 
+
     private void FixedUpdate()
     {
         Move();
     }
 
+
     //移动方法
+    #region
     public void Move()
     {
         rb.velocity = new Vector2(inputDirection.x * speed * Time.deltaTime, rb.velocity.y);
@@ -91,6 +138,8 @@ public class PlayerController : MonoBehaviour
             sp.flipX = true;
         }
 
+        //实现人物翻转的第二个方法
+        #region
         /*
   
         //方法2
@@ -114,13 +163,22 @@ public class PlayerController : MonoBehaviour
         transform.localScale = new Vector3(FaceDir, 1, 1);
 
         */
+        #endregion
+        #endregion
     }
+
+
+    //向跳跃施加一个向上的力
+    #region
     private void Jump(InputAction.CallbackContext context)
     {
         //Debug.Log("Jump");
-        if(physicsCheck.IsGround)
+
+        //检测人物碰撞地面后开始执行
+        //施加一个向上的力
+        if (physicsCheck.IsGround)
         rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
     }
-
+    #endregion
 
 }
