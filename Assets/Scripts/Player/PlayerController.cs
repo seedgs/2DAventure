@@ -38,9 +38,10 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb;
 
     public SpriteRenderer sp;
+
     //title命名
     [Header("基本参数")]
-    private float speed;
+    public float speed;
 
     private float runSpeed;
 
@@ -69,21 +70,13 @@ public class PlayerController : MonoBehaviour
         //当按下F按钮的时候，移动为0
         inputControl.GamePlayer.Attack.performed += ctx =>
         {
-            if (physicsCheck.IsGround)
-            {
-                speed = 0f;
-            }
-            
+            speed = 0f;
         };
 
         //当按下F按钮的时候，移动为恢复（此处恢复为290f）
         inputControl.GamePlayer.Attack.canceled += ctx =>
         {
-            if (physicsCheck.IsGround)
-            {
-                speed = 290f;
-            }
-            
+            speed = 290f;
         };
         #endregion
 

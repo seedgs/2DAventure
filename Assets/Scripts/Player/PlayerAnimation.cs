@@ -11,10 +11,13 @@ public class PlayerAnimation : MonoBehaviour
 
     public bool Atk;
 
+    private PhysicsCheck pc;
+
     public void Awake()
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        pc = GetComponent<PhysicsCheck>();
         Atk = false;
     }
 
@@ -29,8 +32,13 @@ public class PlayerAnimation : MonoBehaviour
         //跑步动画
         anim.SetFloat("VelocityX", Mathf.Abs(rb.velocity.x));
 
+        //跳跃动画
+        anim.SetFloat("VelocityY", rb.velocity.y);
+
+        anim.SetBool("isGround", pc.IsGround);
+
         //攻击动画
-        
+        #region
         if (Input.GetKeyDown(KeyCode.F))
         {
             //按下F按键，执行攻击动画
@@ -52,7 +60,7 @@ public class PlayerAnimation : MonoBehaviour
         {
             anim.SetBool("Attack", true);
         }
-
+        #endregion
 
     }
 }
