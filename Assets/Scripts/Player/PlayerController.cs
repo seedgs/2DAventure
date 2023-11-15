@@ -47,6 +47,8 @@ public class PlayerController : MonoBehaviour
 
     public float jumpForce;
 
+
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -85,6 +87,8 @@ public class PlayerController : MonoBehaviour
             }
         };
         #endregion
+
+
     }
 
     //ÌøÔ¾·½·¨

@@ -8,6 +8,7 @@ public class PlayerAnimation : MonoBehaviour
 
     private Rigidbody2D rb;
 
+    private PhysicsCheck pc;
 
     private void Awake()
     {
@@ -15,6 +16,8 @@ public class PlayerAnimation : MonoBehaviour
         anim = GetComponent<Animator>();
 
         rb = GetComponent<Rigidbody2D>();
+
+        pc = GetComponent<PhysicsCheck>();
     }
 
     private void Update()
@@ -28,5 +31,9 @@ public class PlayerAnimation : MonoBehaviour
         //Velocity是Animator中自定义的参数
         //rb.velocity.x就是人物移动的时候刚体组件的横轴速度
         anim.SetFloat("VelocityX", Mathf.Abs(rb.velocity.x));
+
+        anim.SetFloat("VelocityY", rb.velocity.y);
+
+        anim.SetBool("IsGround", pc.isGround);
     }
 }
