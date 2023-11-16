@@ -37,6 +37,9 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb;
 
     public SpriteRenderer sp;
+
+    private CapsuleCollider2D coll;
+
     //title命名
     [Header("基本参数")]
     public float speed;
@@ -47,7 +50,11 @@ public class PlayerController : MonoBehaviour
 
     public float jumpForce;
 
+    public bool IsCrouch;
 
+    private Vector2 originalOffset;
+
+    private Vector2 originalSize;
 
     private void Awake()
     {
@@ -60,6 +67,11 @@ public class PlayerController : MonoBehaviour
         //把Jump这个函数方法添加到你按键按下的按键按下的那一刻（started）里面执行
         inputControl.GamePlayer.Jump.started += Jump;
 
+        coll = GetComponent<CapsuleCollider2D>();
+
+        originalOffset = coll.offset;
+
+        originalSize = coll.size;
 
         //跑步与走路切换
         #region
@@ -116,6 +128,8 @@ public class PlayerController : MonoBehaviour
     //移动方法
     public void Move()
     {
+        //当不下蹲的时候才可以移动
+        if(IsCrouch!=true)
         rb.velocity = new Vector2(inputDirection.x * speed * Time.deltaTime, rb.velocity.y);
 
         //方法1
@@ -152,6 +166,26 @@ public class PlayerController : MonoBehaviour
         transform.localScale = new Vector3(FaceDir, 1, 1);
 
         */
+
+
+        //inputDirection为操作杆的变量，x方向为左右移动，y方向为跳或者下蹲
+        //y为负数代表下蹲，y为整数代表跳跃
+
+        IsCrouch = inputDirection.y < -0.5f && physicsCheck.isGround ;
+
+        if (IsCrouch)
+        {
+            //修改碰撞体大小和位移
+            coll.offset = new Vector2(-0.09440199f, 0.939046f);
+            coll.size = new Vector2(0.4867882f, 1.6f);
+        }
+        else
+        {
+            //还原之前碰撞参数
+            coll.size = originalSize;
+            coll.offset = originalOffset;
+        }
+
     }
 
 

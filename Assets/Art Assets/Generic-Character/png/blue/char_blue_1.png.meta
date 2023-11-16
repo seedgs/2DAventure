@@ -1425,7 +1425,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_1_62
+      name: char_blue_1_62_squatdown_1_1
       rect:
         serializedVersion: 2
         x: 0
@@ -1446,7 +1446,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_1_63
+      name: char_blue_1_63_squatdown_1_2
       rect:
         serializedVersion: 2
         x: 56
@@ -1467,7 +1467,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_1_64
+      name: char_blue_1_64_squatdown_1_3
       rect:
         serializedVersion: 2
         x: 112
@@ -1620,9 +1620,9 @@ TextureImporter:
       char_blue_1_6: -550228185
       char_blue_1_60: -258489309
       char_blue_1_61: 1084276188
-      char_blue_1_62: -2056150303
-      char_blue_1_63: -1303077318
-      char_blue_1_64: 1799114668
+      char_blue_1_62_squatdown_1_1: -2056150303
+      char_blue_1_63_squatdown_1_2: -1303077318
+      char_blue_1_64_squatdown_1_3: 1799114668
       char_blue_1_65: 395382119
       char_blue_1_66: 734737260
       char_blue_1_67: 1468458361
