@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     {
         //获取inputControl里面的 GamePalyer 里面的 Move 的 Vector2 存进inputDirection，但是这个Vector2需要ReadValue
 
-        inputDirection = inputControl.GamePlayer.Move.ReadValue<Vector2>();
+        inputDirection =inputControl.GamePlayer.Move.ReadValue<Vector2>();
     }
 
 
@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb;
 
     public SpriteRenderer sp;
+
 
     //title命名
     [Header("基本参数")]
@@ -64,7 +65,6 @@ public class PlayerController : MonoBehaviour
         physicsCheck = GetComponent<PhysicsCheck>();
 
 
-
         //攻击判定
         #region
         //当按下F按钮的时候，移动为0
@@ -75,6 +75,20 @@ public class PlayerController : MonoBehaviour
 
         //当按下F按钮的时候，移动为恢复（此处恢复为290f）
         inputControl.GamePlayer.Attack.canceled += ctx =>
+        {
+            speed = 290f;
+        };
+        #endregion
+
+
+        //蹲下判定
+        #region
+
+        inputControl.GamePlayer.SquatDown.performed += ctx =>
+        {
+            speed = 0f;
+        };
+        inputControl.GamePlayer.SquatDown.canceled += ctx =>
         {
             speed = 290f;
         };
@@ -112,6 +126,8 @@ public class PlayerController : MonoBehaviour
             }
         };
         #endregion
+
+
     }
 
     //跳跃方法

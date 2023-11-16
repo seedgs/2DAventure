@@ -126,10 +126,10 @@ TextureImporter:
       name: char_blue_1_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 18
         y: 560
-        width: 56
-        height: 56
+        width: 22
+        height: 32
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -249,7 +249,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_1_6
+      name: char_blue_1_6_atk_1_1
       rect:
         serializedVersion: 2
         x: 0
@@ -270,7 +270,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_1_7
+      name: char_blue_1_7_atk_1_2
       rect:
         serializedVersion: 2
         x: 56
@@ -291,7 +291,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_1_8
+      name: char_blue_1_8_atk_1_3
       rect:
         serializedVersion: 2
         x: 112
@@ -312,7 +312,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_1_9
+      name: char_blue_1_9_atk_1_4
       rect:
         serializedVersion: 2
         x: 168
@@ -333,7 +333,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_1_10
+      name: char_blue_1_10_atk_1_5
       rect:
         serializedVersion: 2
         x: 224
@@ -354,7 +354,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_1_11
+      name: char_blue_1_11_atk_1_6
       rect:
         serializedVersion: 2
         x: 280
@@ -375,7 +375,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_1_12
+      name: char_blue_1_12_atk_2_1
       rect:
         serializedVersion: 2
         x: 336
@@ -396,7 +396,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_1_13
+      name: char_blue_1_13_atk_2_2
       rect:
         serializedVersion: 2
         x: 392
@@ -1425,7 +1425,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_1_62
+      name: char_blue_1_62_Squat_down1
       rect:
         serializedVersion: 2
         x: 0
@@ -1446,7 +1446,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_1_63
+      name: char_blue_1_63_squat_down2
       rect:
         serializedVersion: 2
         x: 56
@@ -1467,7 +1467,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_1_64
+      name: char_blue_1_64_squat_down3
       rect:
         serializedVersion: 2
         x: 112
@@ -1563,10 +1563,10 @@ TextureImporter:
     nameFileIdTable:
       char_blue_1_0: 85906715
       char_blue_1_1: -2117689577
-      char_blue_1_10: -1812788474
-      char_blue_1_11: -1650413497
-      char_blue_1_12: -1253522906
-      char_blue_1_13: 1749062687
+      char_blue_1_10_atk_1_5: -1812788474
+      char_blue_1_11_atk_1_6: -1650413497
+      char_blue_1_12_atk_2_1: -1253522906
+      char_blue_1_13_atk_2_2: 1749062687
       char_blue_1_14: 2134280394
       char_blue_1_15: 2040026856
       char_blue_1_16: 478531143
@@ -1617,18 +1617,18 @@ TextureImporter:
       char_blue_1_57: -1694754710
       char_blue_1_58: 604657126
       char_blue_1_59: -550228185
-      char_blue_1_6: -258489309
       char_blue_1_60: 1084276188
       char_blue_1_61: -2056150303
-      char_blue_1_62: -1303077318
-      char_blue_1_63: 1799114668
-      char_blue_1_64: 395382119
+      char_blue_1_62_Squat_down1: -2056150303
+      char_blue_1_63_squat_down2: -1303077318
+      char_blue_1_64_squat_down3: 1799114668
       char_blue_1_65: 734737260
       char_blue_1_66: 1468458361
       char_blue_1_67: -329698730
-      char_blue_1_7: -8527870
-      char_blue_1_8: -1534562159
-      char_blue_1_9: -192114260
+      char_blue_1_6_atk_1_1: -550228185
+      char_blue_1_7_atk_1_2: -329698730
+      char_blue_1_8_atk_1_3: -8527870
+      char_blue_1_9_atk_1_4: -1534562159
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

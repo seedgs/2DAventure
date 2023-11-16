@@ -9,9 +9,24 @@ public class PlayerAnimation : MonoBehaviour
 
     private Rigidbody2D rb;
 
-    public bool Atk;
+    private bool Atk;
+
+    private bool Sd;
 
     private PhysicsCheck pc;
+
+    private CapsuleCollider2D cc;
+
+
+    //下蹲刚体数值
+    #region
+    //下蹲瞬间的刚体数值
+    private Vector2 setOffsetDown = new(-0.0944f, 0.93f);
+    private Vector2 setSizeDown = new(0.48678f, 1.66f);
+    //起身瞬间的刚体数值
+    private Vector2 setOffsetUp = new(-0.09440199f, 0.939046f);
+    private Vector2 setSizeUp = new(0.4867882f, 1.878092f);
+    #endregion
 
     public void Awake()
     {
@@ -19,6 +34,7 @@ public class PlayerAnimation : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         pc = GetComponent<PhysicsCheck>();
         Atk = false;
+        cc = GetComponent<CapsuleCollider2D>();
     }
 
     private void Update()
@@ -37,20 +53,47 @@ public class PlayerAnimation : MonoBehaviour
 
         anim.SetBool("isGround", pc.IsGround);
 
+        //下蹲动画
+        #region
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            Sd = true;
+
+            //当下蹲瞬间，刚体轮廓的数值变换
+            cc.offset = setOffsetDown;
+            cc.size = setSizeDown;
+            //Debug.Log("squatDown");
+        }else if (Input.GetKeyUp(KeyCode.S))
+        {
+            Sd = false;
+
+            //当起身瞬间，刚体轮廓的数值变换
+            cc.offset = setOffsetUp;
+            cc.size = setSizeUp;
+        }
+        if (Sd == false)
+        {
+            anim.SetBool("squatDown", false);
+        }
+        if (Sd == true)
+        {
+            anim.SetBool("squatDown", true);
+        }
+        #endregion
+
         //攻击动画
         #region
         if (Input.GetKeyDown(KeyCode.F))
         {
             //按下F按键，执行攻击动画
             Atk = true;
-            //Debug.Log("1");
+            //Debug.Log("Attack");
         }
         else if(Input.GetKeyUp(KeyCode.F))
         {
             //抬起F按键，结束攻击动画
             Atk = false;
         }
-
 
         if (Atk == false)
         {
