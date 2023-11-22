@@ -21,8 +21,8 @@ public class PlayerAnimation : MonoBehaviour
     //下蹲刚体数值
     #region
     //下蹲瞬间的刚体数值
-    private Vector2 setOffsetDown = new(-0.0944f, 0.93f);
-    private Vector2 setSizeDown = new(0.48678f, 1.66f);
+    private Vector2 setOffsetDown = new(-0.0944f, 0.79f);
+    private Vector2 setSizeDown = new(0.48678f, 1.57f);
     //起身瞬间的刚体数值
     private Vector2 setOffsetUp = new(-0.09440199f, 0.939046f);
     private Vector2 setSizeUp = new(0.4867882f, 1.878092f);
@@ -36,7 +36,7 @@ public class PlayerAnimation : MonoBehaviour
         Atk = false;
         cc = GetComponent<CapsuleCollider2D>();
     }
-
+    
     private void Update()
     {
         setanimation();

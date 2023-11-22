@@ -155,6 +155,14 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    //测试
+    //OnTriggerStay2D为当触发器接触的时候，进行碰撞检测
+    //private void OnTriggerStay2D(Collider2D collision)
+    //{
+    //    Debug.Log(collision.name);
+    //}
+
+
     //移动方法
     #region
     public void Move()
