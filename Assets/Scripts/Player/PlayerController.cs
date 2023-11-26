@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
     //需要获得别的组件，就创建这个组件对应的类型，一个变量
     //需要获得PhysicsCheckl里面的东西，组件名+变量（命名随意）
     private PhysicsCheck physicsCheck;
-    
+
     public Rigidbody2D rb;
 
     public SpriteRenderer sp;
@@ -44,9 +44,9 @@ public class PlayerController : MonoBehaviour
     [Header("基本参数")]
     public float speed;
 
-    private float runSpeed ;
+    private float runSpeed;
 
-    private float walkSpeed ;
+    private float walkSpeed;
 
     public float jumpForce;
 
@@ -103,6 +103,13 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    /*//碰撞测试
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        Debug.Log(collision.name);
+    }*/
+
+
     //跳跃方法
 
 
@@ -129,16 +136,16 @@ public class PlayerController : MonoBehaviour
     public void Move()
     {
         //当不下蹲的时候才可以移动
-        if(IsCrouch!=true)
-        rb.velocity = new Vector2(inputDirection.x * speed * Time.deltaTime, rb.velocity.y);
+        if (IsCrouch != true)
+            rb.velocity = new Vector2(inputDirection.x * speed * Time.deltaTime, rb.velocity.y);
 
         //方法1
         //这个方法是用了Sprite Renderer里面的Flip的X轴是被点选（也就是布尔值的True和Flase）来判断
-        if(inputDirection.x > 0)
+        if (inputDirection.x > 0)
         {
             sp.flipX = false;
         }
-        else if(inputDirection.x < 0)
+        else if (inputDirection.x < 0)
         {
             sp.flipX = true;
         }
@@ -171,7 +178,7 @@ public class PlayerController : MonoBehaviour
         //inputDirection为操作杆的变量，x方向为左右移动，y方向为跳或者下蹲
         //y为负数代表下蹲，y为整数代表跳跃
 
-        IsCrouch = inputDirection.y < -0.5f && physicsCheck.isGround ;
+        IsCrouch = inputDirection.y < -0.5f && physicsCheck.isGround;
 
         if (IsCrouch)
         {
@@ -197,10 +204,8 @@ public class PlayerController : MonoBehaviour
         //physicsCheck.isGround：检测地面碰撞
         if (physicsCheck.isGround)
 
-        //在面上施加一个力
-        //Debug.Log("Jump");
-        rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
+            //在面上施加一个力
+            //Debug.Log("Jump");
+            rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
     }
-
-
 }
