@@ -50,6 +50,12 @@ public class PlayerController : MonoBehaviour
 
     public float jumpForce;
 
+    //添加一个瞬时的力
+    public float hurtForce;
+
+    public bool isHurt;
+
+    public bool isDeath;
     #endregion
 
 
@@ -114,7 +120,7 @@ public class PlayerController : MonoBehaviour
             }
         };
 
-
+        
         //获取控制中控制走路的组件，在“松开”(canceled)的时候,调用回调函数(+= ctx =>)
         //回调函数检测人物碰撞地面后开始执行
         //“松开”后为跑步模式
@@ -151,6 +157,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!isHurt)
         Move();
     }
 
@@ -223,4 +230,27 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
+    //施加一个反弹力
+    public void getHurt(Transform attacker)
+    {
+        isHurt = true;
+        //受伤的时候，停止一切操控，所以velocity的x和y轴方向速度都为0
+        rb.velocity = Vector2.zero;
+        
+        //人物受伤后反弹的距离是当前人物的X轴数值 减去 被碰撞（野猪）的当前的X轴的数值
+        //例子：人物在x轴数值为1，野猪x轴数值为0，相减为1，人物反弹1的距离
+        //但是如果人物距离野猪很远，人物x轴数值为100的话，野猪不变，相减为100，人物反弹力为100
+        //添加.normalized就是无论相减为多少，都在0-1之间，就是说把相减的数值归1化
+        Vector2 dir = new Vector2((transform.position.x - attacker.position.x), 0).normalized;
+        rb.AddForce(dir * hurtForce, ForceMode2D.Impulse);
+
+    }
+
+    public void playerDeath()
+    {
+        //当isDeath为打开状态的时候
+        //停止所有操作
+        isDeath = true;
+        inputControl.GamePlayer.Disable();
+    }
 }

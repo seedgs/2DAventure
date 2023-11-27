@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Character : MonoBehaviour
 {
@@ -20,10 +21,18 @@ public class Character : MonoBehaviour
     //无敌的判断（布尔值）
     public bool invulnerable;
 
+    //把Event事件内的执行事件注册到OnTakeTruma里面去了
+    public UnityEvent<Transform> OnTakeTruma;
+
+    public UnityEvent osDeath;
+
+
+
     private void Start()
     {
         //游戏一开始的时候玩家都是满血状态的
         currentHealth = maxHealth;
+
     }
 
     //Update每次检测
@@ -60,12 +69,22 @@ public class Character : MonoBehaviour
 
             //当上面扣血的时候，执行方法 TriggerInvulnerAble()
             TriggerInvulnerAble();
+
+            //受伤执行
+            //我们要判断是否有方法添加进来，所以在后面添加?
+            //Invoke是执行方法
+            //attacker.transform是UnityEvent括号内的参数，参数填写这里就需要填写
+            //因为上面参数是transform，所以下面的参数是需要碰撞的物体的transform
+            OnTakeTruma?.Invoke(attacker.transform);
+            //Debug.Log(attacker.name);
+
         }
         //否则，人物血量直接为0
         else
         {
             //人物死亡
             currentHealth = 0;
+            osDeath?.Invoke();
         }
 
  

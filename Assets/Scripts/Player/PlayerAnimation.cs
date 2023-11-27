@@ -17,6 +17,8 @@ public class PlayerAnimation : MonoBehaviour
 
     private CapsuleCollider2D cc;
 
+    private PlayerController pcl;
+
 
     //下蹲刚体数值
     #region
@@ -35,6 +37,7 @@ public class PlayerAnimation : MonoBehaviour
         pc = GetComponent<PhysicsCheck>();
         Atk = false;
         cc = GetComponent<CapsuleCollider2D>();
+        pcl = GetComponent<PlayerController>();
     }
     
     private void Update()
@@ -52,6 +55,8 @@ public class PlayerAnimation : MonoBehaviour
         anim.SetFloat("VelocityY", rb.velocity.y);
 
         anim.SetBool("isGround", pc.IsGround);
+
+        anim.SetBool("isDeath", pcl.isDeath); 
 
         //下蹲动画
         #region
@@ -106,4 +111,14 @@ public class PlayerAnimation : MonoBehaviour
         #endregion
 
     }
+
+    public void playerHurt()
+    {
+        anim.SetTrigger("Hurt");
+    }
+
+
+
+
+
 }
