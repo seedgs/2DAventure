@@ -56,8 +56,12 @@ public class PlayerAnimation : MonoBehaviour
 
         anim.SetBool("isGround", pc.IsGround);
 
-        anim.SetBool("isDeath", pcl.isDeath); 
+        anim.SetBool("isDeath", pcl.isDeath);
 
+        anim.SetBool("isAttack", pcl.isAttack);
+
+
+        
         //下蹲动画
         #region
         if (Input.GetKeyDown(KeyCode.S))
@@ -86,29 +90,8 @@ public class PlayerAnimation : MonoBehaviour
         }
         #endregion
 
-        //攻击动画
-        #region
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            //按下F按键，执行攻击动画
-            Atk = true;
-            //Debug.Log("Attack");
-        }
-        else if(Input.GetKeyUp(KeyCode.F))
-        {
-            //抬起F按键，结束攻击动画
-            Atk = false;
-        }
-
-        if (Atk == false)
-        {
-            anim.SetBool("Attack", false);
-        }
-        if (Atk == true)
-        {
-            anim.SetBool("Attack", true);
-        }
-        #endregion
+       
+        
 
     }
 
@@ -117,7 +100,11 @@ public class PlayerAnimation : MonoBehaviour
         anim.SetTrigger("Hurt");
     }
 
-
+    //攻击动画
+    public void PlayerAttack()
+    {
+        anim.SetTrigger("Attack");
+    }
 
 
 

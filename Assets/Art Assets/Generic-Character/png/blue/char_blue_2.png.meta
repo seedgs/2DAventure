@@ -585,7 +585,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_22
+      name: char_blue_2_22_attack_3_1
       rect:
         serializedVersion: 2
         x: 0
@@ -606,7 +606,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_23
+      name: char_blue_2_23_attack_3_2
       rect:
         serializedVersion: 2
         x: 56
@@ -627,7 +627,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_24
+      name: char_blue_2_24_attack_3_3
       rect:
         serializedVersion: 2
         x: 112
@@ -648,7 +648,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_25
+      name: char_blue_2_25_attack_3_4
       rect:
         serializedVersion: 2
         x: 168
@@ -669,7 +669,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_26
+      name: char_blue_2_26_attack_3_5
       rect:
         serializedVersion: 2
         x: 224
@@ -690,7 +690,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_27
+      name: char_blue_2_27_attack_3_6
       rect:
         serializedVersion: 2
         x: 280
@@ -711,7 +711,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_28
+      name: char_blue_2_28_attack_3_7
       rect:
         serializedVersion: 2
         x: 336
@@ -732,7 +732,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_29
+      name: char_blue_2_29_attack_3_8
       rect:
         serializedVersion: 2
         x: 392
@@ -988,31 +988,31 @@ TextureImporter:
       char_blue_2_2: -77804646
       char_blue_2_20: -157007000
       char_blue_2_21: -660127629
-      char_blue_2_22: -912516127
-      char_blue_2_23: -896091928
-      char_blue_2_24: -1291867278
-      char_blue_2_25: 3078910
-      char_blue_2_26: -474967417
-      char_blue_2_27: -1628549838
-      char_blue_2_28: -966694428
-      char_blue_2_29: 626725471
-      char_blue_2_3: 543057416
-      char_blue_2_30: -1838056879
-      char_blue_2_31: 178336038
-      char_blue_2_32: 1084606180
-      char_blue_2_33: 1284263252
-      char_blue_2_34: -973944388
-      char_blue_2_35: -493043749
-      char_blue_2_36: 1624304759
-      char_blue_2_37: -1058712273
-      char_blue_2_38: 2112458375
-      char_blue_2_39: -272816681
-      char_blue_2_4: -777493711
-      char_blue_2_5: 892463527
-      char_blue_2_6: -1836874980
-      char_blue_2_7: -82530663
-      char_blue_2_8: -1139108548
-      char_blue_2_9: -1861991707
+      char_blue_2_22_attack_3_1: -896091928
+      char_blue_2_23_attack_3_2: -896091928
+      char_blue_2_24_attack_3_3: -1291867278
+      char_blue_2_25_attack_3_4: 3078910
+      char_blue_2_26_attack_3_5: -474967417
+      char_blue_2_27_attack_3_6: -1628549838
+      char_blue_2_28_attack_3_7: -966694428
+      char_blue_2_29_attack_3_8: 626725471
+      char_blue_2_3: -1838056879
+      char_blue_2_30: 178336038
+      char_blue_2_31: 1084606180
+      char_blue_2_32: 1284263252
+      char_blue_2_33: -973944388
+      char_blue_2_34: -493043749
+      char_blue_2_35: 1624304759
+      char_blue_2_36: -1058712273
+      char_blue_2_37: 2112458375
+      char_blue_2_38: -272816681
+      char_blue_2_39: -777493711
+      char_blue_2_4: 892463527
+      char_blue_2_5: -1836874980
+      char_blue_2_6: -82530663
+      char_blue_2_7: -1139108548
+      char_blue_2_8: -1861991707
+      char_blue_2_9: -912516127
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

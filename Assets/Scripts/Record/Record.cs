@@ -29,8 +29,8 @@ public class Record : MonoBehaviour
 
 
     //2.11受伤和死亡的逻辑和动画
-    //1、受伤动画
-    //2、死亡动画
+    //1、创建受伤动画
+    //2、创建死亡动画
     //3、创建动画逻辑，玩家受伤后，会有闪烁、变红的状态
     //4、创建叠加层：Additive在之前层的基础上叠加动画状态
     //5、创建空的状态：add property会有各种状态可加
@@ -42,7 +42,7 @@ public class Record : MonoBehaviour
     //11、当人物受到伤害时，需要执行PlayerAnimation脚本的动画代码，所以Event事件首先导入PlayerAnimation脚本，然后下拉选择palyerAnimation脚本的palyHurt()方法
     //12、？是检测是否为null，Invoke()是启动，谁攻击我，我就在()内传递睡的transform（当前是野猪的transform）
     //13、动画挂载受伤的动画
-    //14、载 playerController脚本内创建一个受伤反弹的效果
+    //14、在 playerController脚本内创建一个受伤反弹的效果
     //15、创建 GetHurt()方法，之前传递了transform的参数，所以()内要传递野猪的transform
     //16、创建布尔变量IsHurt
     //17、创建 float hurtForce反弹力的变量
@@ -75,4 +75,34 @@ public class Record : MonoBehaviour
     //42、最后在playerAnimation脚本内，把动画布尔与playerController脚本内的 IsDead布尔相关联
     //43、死亡事件导入playerDead()方法即可
     //44、因为人物死亡动画会循环播放的缘故，需要在所在动画里取消勾选 Loop time（循环时间）框
+
+
+
+
+    //2.12.三段攻击动画的实现
+    //创建攻击动画（Animation里面创建）
+    //创建新的动画层Layers，命名为Attack Layer（攻击状态的动画层）
+    //在Attack Layer里创建新的空状态
+    //把三段动画层拖进Layers控制面板内
+    //创建isAttack布尔值，为了检测攻击动画是否执行
+    //创建Attack的Trigger
+    //创建comBoo的int，为了计数
+    //空状态指向Attack01动画，绑定上面创建的数值
+    //Attack01动画指向Attack02动画，绑定上面创建的数值
+    //Attack02动画指向Attack03动画，绑定上面创建的数值
+    //创建控制的按键
+
+    //PlayerController脚本创建isAttack布尔值，创建comBoo（int）数值
+    //PlayerController脚本创建关联控制按键的函数，并命名为PlayerAttack
+
+    //PlayerAnimation脚本创建PlayerAttack()方法
+    //方法内关联在Animation动画层Layer内的Attack的trigger
+
+    //创建PlayerAttack()方法
+    //方法内需要判定isAttack是否打开
+    //执行PlayerAnimation脚本内，PlayerAttack()方法
+    //comBoo需要自行递增
+    //当Comboo数大于3时comBoo为0，为了还原数值，循环执行攻击状态
+
+    
 }

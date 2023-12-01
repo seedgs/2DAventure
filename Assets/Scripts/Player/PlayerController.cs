@@ -34,28 +34,45 @@ public class PlayerController : MonoBehaviour
     public PlayerInputControl inputControl;
 
     public Vector2 inputDirection;
-    
+
+    //获取PlayerAnimation脚本组件
+    public PlayerAnimation PlayerAnimation;
+
+    //加载刚体
     public Rigidbody2D rb;
 
+    //加载“灵巧”渲染器
     public SpriteRenderer sp;
 
 
     //title命名
     [Header("基本参数")]
+
+    //速度
     public float speed;
 
+    //奔跑速度
     private float runSpeed;
 
+    //行走速度
     private float walkSpeed;
 
+    //当人物起跳时，添加一个瞬时向下的力
     public float jumpForce;
 
-    //添加一个瞬时的力
+    //当人物受伤时，添加一个瞬时横向的力
     public float hurtForce;
 
+    //检测受伤的布尔值
     public bool isHurt;
 
+    //检测死亡的布尔值
     public bool isDeath;
+
+    //创建攻击布尔值
+    public bool isAttack;
+
+
     #endregion
 
 
@@ -63,27 +80,24 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+
+        physicsCheck = GetComponent<PhysicsCheck>();
+
+        PlayerAnimation = GetComponent<PlayerAnimation>();
+
         inputControl = new PlayerInputControl();
         //started那就按下那一刻
         //把Jump这个函数方法添加到你按键按下的按键按下的那一刻（started）里面执行
         inputControl.GamePlayer.Jump.started += Jump;
 
-        physicsCheck = GetComponent<PhysicsCheck>();
+       
 
 
         //攻击判定
         #region
-        //当按下F按钮的时候，移动为0
-        inputControl.GamePlayer.Attack.performed += ctx =>
-        {
-            speed = 0f;
-        };
 
-        //当按下F按钮的时候，移动为恢复（此处恢复为290f）
-        inputControl.GamePlayer.Attack.canceled += ctx =>
-        {
-            speed = 290f;
-        };
+        inputControl.GamePlayer.Attack.started += PlayerAttack;
+
         #endregion
 
 
@@ -136,6 +150,8 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    
+
     //跳跃方法
 
 
@@ -178,7 +194,8 @@ public class PlayerController : MonoBehaviour
 
         //方法1
         //这个方法是用了Sprite Renderer里面的Flip的X轴是被点选（也就是布尔值的True和Flase）来判断
-        if(inputDirection.x > 0)
+        //Sprite Renderer里面的Flip是，沿着裁剪图片时设定的焦点来进行镜像翻转
+        if (inputDirection.x > 0)
         {
             sp.flipX = false;
         }
@@ -242,7 +259,10 @@ public class PlayerController : MonoBehaviour
         //但是如果人物距离野猪很远，人物x轴数值为100的话，野猪不变，相减为100，人物反弹力为100
         //添加.normalized就是无论相减为多少，都在0-1之间，就是说把相减的数值归1化
         Vector2 dir = new Vector2((transform.position.x - attacker.position.x), 0).normalized;
+
         rb.AddForce(dir * hurtForce, ForceMode2D.Impulse);
+
+        PlayerAnimation.playerHurt();
 
     }
 
@@ -253,4 +273,32 @@ public class PlayerController : MonoBehaviour
         isDeath = true;
         inputControl.GamePlayer.Disable();
     }
+
+    //人物死亡后，避免敌人再次攻击
+    private void CheckState()
+    {
+        if (isDeath)
+        {
+            //当人物死亡的时候，layer改成“Enemy”，因为野猪（敌人）也是“Enemy”所以此时不会被攻击
+            gameObject.layer = LayerMask.NameToLayer("Enemy");
+        }
+        else
+        {
+            //当人物不是死亡的时候，layer改成“Player”，因为野猪（敌人）也是“Enemy”所以此时会被攻击
+            gameObject.layer = LayerMask.NameToLayer("Player");
+        }
+    }
+
+
+    //攻击函数
+    private void PlayerAttack(InputAction.CallbackContext obj)
+    {
+        //检测是否有启动攻击的布尔值
+        isAttack = true;
+
+        //启动PlayerAnimation的PalyerAttack，也就是攻击动画
+        PlayerAnimation.PlayerAttack();
+
+    }
+
 }
