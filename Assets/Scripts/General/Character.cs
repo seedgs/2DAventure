@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Character : MonoBehaviour
 {
@@ -14,8 +16,9 @@ public class Character : MonoBehaviour
 
     public bool invulnerable;
 
+    public UnityEvent<Transform> OntakeDamage;
 
-
+    public UnityEvent OnDead;
 
     //Awake()为一个生命周期只执行一次
     //如果人物重生，人物的buffer就会叠加，因为重生只有一次，所以叠buffer也就只有有一次
@@ -63,11 +66,13 @@ public class Character : MonoBehaviour
             //Debug.Log(attacker.attackDamage);
             currentHealth -= attacker.attackDamage;
             OnTriggerInvlnerable();
+            OntakeDamage?.Invoke(attacker.transform);
         }
-        else
+        else 
         {
             currentHealth = 0;
             //死亡
+            OnDead?.Invoke();
         }
         
     }
@@ -82,4 +87,5 @@ public class Character : MonoBehaviour
         }
     }
 
+ 
 }

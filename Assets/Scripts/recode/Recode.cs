@@ -31,4 +31,38 @@ public class Recode : MonoBehaviour
     //4-8、每一次（start）人物发生碰撞的时候，都需要执行计数器倒计时计算，如果计数器时间被倒数到0的时候，无敌停止
     //4-9、人物在血量不足以承受伤害的时候，当前血量就为0，人物血量大于0的时候可以执行扣血计算
 
+
+
+
+    //2.12.三段攻击动画的实现
+    //创建攻击动画（Animation里面创建）
+    //创建新的动画层Layers，命名为Attack Layer（攻击状态的动画层）
+    //在Attack Layer里创建新的空状态
+    //把三段动画层拖进Layers控制面板内
+    //创建isAttack布尔值，为了检测攻击动画是否执行
+    //创建Attack的Trigger
+    //创建comBoo的int，为了计数
+    //空状态指向Attack01动画，绑定上面创建的数值
+    //Attack01动画指向Attack02动画，绑定上面创建的数值
+    //Attack02动画指向Attack03动画，绑定上面创建的数值
+    //创建控制的按键
+
+    //PlayerController脚本创建关联攻击按键的代码,命名为Attack
+    //PlayerController脚本创建这个Attack的函数方法（这个方法最好系统生成，因为需要传参数，可以参考Jump()方法）
+    //Attack()方法内，关联PlayerAnimation脚本的PlayerAttack()方法（此时暂时无法关联，因为还没有创建，同时PlayerController脚本还没有关联PlayerAnimation脚本，所以需要GetComponent<>一下）
+
+    //PlayerAnimation脚本内创建PlayerAttack()方法
+    //PlayerAttack()方法内关联在Animation动画层Layer内的Attack的trigger
+
+    //回到PlayerController脚本内，关联PlayerAnimation脚本的PlayerAttack()方法（此时就可以关联了）
+    //PlayerController脚本内,创建isAttack布尔值
+    //PlayerAttack()方法内，当按下攻击按键的时候，isAttack（布尔值）要打开
+    //PlayerController脚本内,创建Combo的整数（int）值
+    //PlayerController脚本创建isAttack布尔值，创建comBo（int）数值
+    //comBoo需要自行递增
+    //当Comboo数大于3时comBoo为0，为了还原数值，循环执行攻击状态
+
+    //回到PlayerAnimation脚本，需要关联PlayerController脚本创建的isAttack、comBo相关数值（也就是anim的关联）
+
+
 }

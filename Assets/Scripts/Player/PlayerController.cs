@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.PlayerLoop;
 
+using UnityEditor.Experimental.GraphView;
+
 public class PlayerController : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -40,21 +42,36 @@ public class PlayerController : MonoBehaviour
 
     private CapsuleCollider2D coll;
 
+    //获取动画组件
+    private PlayerAnimation playerAnimation;
+
     //title命名
     [Header("基本参数")]
-    public float speed;
-
+  
     private float runSpeed;
 
     private float walkSpeed;
 
+    public float speed;
+
     public float jumpForce;
 
-    public bool IsCrouch;
+    public float hurtForce;
 
     private Vector2 originalOffset;
 
     private Vector2 originalSize;
+
+    [Header("状态")]
+    public bool IsHurt;
+
+    public bool IsCrouch;
+
+    public bool IsDead;
+
+    public bool isAttack;
+
+
 
     private void Awake()
     {
@@ -69,9 +86,14 @@ public class PlayerController : MonoBehaviour
 
         coll = GetComponent<CapsuleCollider2D>();
 
+        playerAnimation = GetComponent<PlayerAnimation>();
+
         originalOffset = coll.offset;
 
         originalSize = coll.size;
+
+        //攻击
+        inputControl.GamePlayer.Attack.started += Attack;
 
         //跑步与走路切换
         #region
@@ -103,6 +125,8 @@ public class PlayerController : MonoBehaviour
 
     }
 
+
+
     /*//碰撞测试
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -129,6 +153,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(!IsHurt)
         Move();
     }
 
@@ -207,5 +232,32 @@ public class PlayerController : MonoBehaviour
             //在面上施加一个力
             //Debug.Log("Jump");
             rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
+    }
+
+    //受伤后，施加一个反弹力
+    public void GetHurt(Transform attacker)
+    {
+        IsHurt = true;
+
+        //停止运动
+        rb.velocity = Vector2.zero;
+
+        Vector2 dir = new Vector2(transform.position.x - attacker.position.x, 0).normalized;
+        rb.AddForce(dir * hurtForce, ForceMode2D.Impulse);
+    }
+
+
+    public void PlayerDead()
+    {
+        IsDead = true;
+        Debug.Log("1");
+        inputControl.GamePlayer.Disable();
+    }
+
+    private void Attack(InputAction.CallbackContext context)
+    {
+        playerAnimation.PlayerAttack();
+        isAttack = true;
+
     }
 }

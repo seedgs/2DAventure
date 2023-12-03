@@ -49,5 +49,25 @@ public class PlayerAnimation : MonoBehaviour
 
         //下蹲动画控制
         anim.SetBool("IsCrouch", pcl.IsCrouch);
+
+        anim.SetBool("IsDead", pcl.IsDead);
+
+        //攻击动画控制
+        //关联PlayerController脚本的isAttack布尔值
+        anim.SetBool("isAttack", pcl.isAttack);
+
     }
+
+    public void playerHurt()
+    {
+        anim.SetTrigger("IsHurt");
+        
+    }
+
+    public void PlayerAttack()
+    {
+        anim.SetTrigger("Attack");
+    }
+
+
 }
