@@ -17,4 +17,6 @@ public class Attack : MonoBehaviour
         collision.GetComponent<Character>()?.takeTrauma(this);
         //?意思是相当于不为空的判断：!=null
     }
+
+ 
 }

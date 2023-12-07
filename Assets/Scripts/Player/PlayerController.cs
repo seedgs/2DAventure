@@ -22,7 +22,11 @@ public class PlayerController : MonoBehaviour
         //获取inputControl里面的 GamePalyer 里面的 Move 的 Vector2 存进inputDirection，但是这个Vector2需要ReadValue
 
         inputDirection =inputControl.GamePlayer.Move.ReadValue<Vector2>();
+        CheckMaterial();
     }
+
+
+    
 
 
     //方法
@@ -75,6 +79,12 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+
+    [Header("物理材质")]
+
+    public PhysicsMaterial2D Normal;
+
+    public PhysicsMaterial2D Wall;
 
 
     private void Awake()
@@ -173,7 +183,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!isHurt)
+        if (!isHurt && !isAttack)
         Move();
     }
 
@@ -244,6 +254,8 @@ public class PlayerController : MonoBehaviour
         //施加一个向上的力
         if (physicsCheck.IsGround)
         rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
+
+
     }
     #endregion
 
@@ -299,6 +311,15 @@ public class PlayerController : MonoBehaviour
         //启动PlayerAnimation的PalyerAttack，也就是攻击动画
         PlayerAnimation.PlayerAttack();
 
+        //当按下，攻击为0
+        rb.velocity=new Vector2(0,rb.velocity.y);
+        
+    }
+
+    //材质的判定
+    public void CheckMaterial()
+    {
+        rb.sharedMaterial =  physicsCheck.IsGround? Wall : Normal;
     }
 
 }
