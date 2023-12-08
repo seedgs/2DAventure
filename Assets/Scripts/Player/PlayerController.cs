@@ -24,21 +24,24 @@ public class PlayerController : MonoBehaviour
         inputDirection =inputControl.GamePlayer.Move.ReadValue<Vector2>();
         CheckMaterial();
 
+        //当触地面的时候，滑落效果停止
         if (physicsCheck.IsGround)
-            isClimb = false;    
+            isClimb = false;
 
+        
         if (isClimb)
         {
-            inputControl.GamePlayer.Disable();
+            //当滑落效果开始时，不允许人物左右操作
+            inputControl.GamePlayer.Move.Disable();
             Debug.Log("Move = Disable");
         }
         else if (physicsCheck.IsGround)
         {
-            inputControl.GamePlayer.Enable();
+            //当接触地面时，允许人物左右移动
+            inputControl.GamePlayer.Move.Enable();
             //Debug.Log("Move = Enable");
         }
 
-        
 
     }
 
@@ -344,10 +347,12 @@ public class PlayerController : MonoBehaviour
         
     }
 
+
+    //墙壁滑落
     public void PlayerClimb()
     {
+        //检测是否触地面
         if (!physicsCheck.IsGround)
-        
             isClimb = true;
         PlayerAnimation.PlayerClimb();
             

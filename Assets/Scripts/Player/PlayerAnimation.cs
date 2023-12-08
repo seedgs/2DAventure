@@ -110,6 +110,7 @@ public class PlayerAnimation : MonoBehaviour
         anim.SetTrigger("Attack");
     }
 
+    //触墙滑落动画
     public void PlayerClimb()
     {
         anim.SetTrigger("Climb");
