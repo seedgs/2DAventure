@@ -20,9 +20,26 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //获取inputControl里面的 GamePalyer 里面的 Move 的 Vector2 存进inputDirection，但是这个Vector2需要ReadValue
-
+        
         inputDirection =inputControl.GamePlayer.Move.ReadValue<Vector2>();
         CheckMaterial();
+
+        if (physicsCheck.IsGround)
+            isClimb = false;    
+
+        if (isClimb)
+        {
+            inputControl.GamePlayer.Disable();
+            Debug.Log("Move = Disable");
+        }
+        else if (physicsCheck.IsGround)
+        {
+            inputControl.GamePlayer.Enable();
+            //Debug.Log("Move = Enable");
+        }
+
+        
+
     }
 
 
@@ -76,6 +93,9 @@ public class PlayerController : MonoBehaviour
     //创建攻击布尔值
     public bool isAttack;
 
+    //爬墙布尔值
+    public bool isClimb;
+
 
     #endregion
 
@@ -84,7 +104,7 @@ public class PlayerController : MonoBehaviour
 
     public PhysicsMaterial2D Normal;
 
-    public PhysicsMaterial2D Wall;
+    public PhysicsMaterial2D Rock;
 
 
     private void Awake()
@@ -255,6 +275,7 @@ public class PlayerController : MonoBehaviour
         if (physicsCheck.IsGround)
         rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
 
+        
 
     }
     #endregion
@@ -274,7 +295,7 @@ public class PlayerController : MonoBehaviour
 
         rb.AddForce(dir * hurtForce, ForceMode2D.Impulse);
 
-        PlayerAnimation.playerHurt();
+        PlayerAnimation.PlayerHurt();
 
     }
 
@@ -319,7 +340,17 @@ public class PlayerController : MonoBehaviour
     //材质的判定
     public void CheckMaterial()
     {
-        rb.sharedMaterial =  physicsCheck.IsGround? Wall : Normal;
+        rb.sharedMaterial = physicsCheck.IsGround ? Normal : Rock;
+        
+    }
+
+    public void PlayerClimb()
+    {
+        if (!physicsCheck.IsGround)
+        
+            isClimb = true;
+        PlayerAnimation.PlayerClimb();
+            
     }
 
 }

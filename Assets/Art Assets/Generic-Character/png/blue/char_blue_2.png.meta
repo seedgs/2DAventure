@@ -333,7 +333,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_10
+      name: char_blue_2_10_glissade_1_1
       rect:
         serializedVersion: 2
         x: 0
@@ -354,7 +354,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_11
+      name: char_blue_2_11_glissade_1_2
       rect:
         serializedVersion: 2
         x: 56
@@ -375,7 +375,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_12
+      name: char_blue_2_12_glissade_1_3
       rect:
         serializedVersion: 2
         x: 112
@@ -396,7 +396,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_13
+      name: char_blue_2_13_glissade_2_1
       rect:
         serializedVersion: 2
         x: 168
@@ -417,7 +417,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_14
+      name: char_blue_2_14_glissade_2_2
       rect:
         serializedVersion: 2
         x: 224
@@ -438,7 +438,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_15
+      name: char_blue_2_15_glissade_2_3
       rect:
         serializedVersion: 2
         x: 280
@@ -459,7 +459,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_16
+      name: char_blue_2_16_glissade_3_1
       rect:
         serializedVersion: 2
         x: 336
@@ -480,7 +480,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_17
+      name: char_blue_2_17_glissade_3_2
       rect:
         serializedVersion: 2
         x: 392
@@ -501,7 +501,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_18
+      name: char_blue_2_18_climb_1_1
       rect:
         serializedVersion: 2
         x: 0
@@ -522,7 +522,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_19
+      name: char_blue_2_19_climb_1_2
       rect:
         serializedVersion: 2
         x: 56
@@ -543,7 +543,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_20
+      name: char_blue_2_20_climb_1_3
       rect:
         serializedVersion: 2
         x: 112
@@ -564,7 +564,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: char_blue_2_21
+      name: char_blue_2_21_climb_2_1
       rect:
         serializedVersion: 2
         x: 168
@@ -975,19 +975,19 @@ TextureImporter:
     nameFileIdTable:
       char_blue_2_0: 2012623127
       char_blue_2_1: -366523177
-      char_blue_2_10: 1344819989
-      char_blue_2_11: -1482584280
-      char_blue_2_12: 1210232382
-      char_blue_2_13: 776552204
-      char_blue_2_14: -907719154
-      char_blue_2_15: -1900764210
-      char_blue_2_16: 1016627731
-      char_blue_2_17: -1708459584
-      char_blue_2_18: -1590414068
-      char_blue_2_19: 1888468517
+      char_blue_2_10_glissade_1_1: 1344819989
+      char_blue_2_11_glissade_1_2: -1482584280
+      char_blue_2_12_glissade_1_3: 1210232382
+      char_blue_2_13_glissade_2_1: 776552204
+      char_blue_2_14_glissade_2_2: -907719154
+      char_blue_2_15_glissade_2_3: -1900764210
+      char_blue_2_16_glissade_3_1: 1016627731
+      char_blue_2_17_glissade_3_2: -1708459584
+      char_blue_2_18_climb_1_1: -1590414068
+      char_blue_2_19_climb_1_2: 1888468517
       char_blue_2_2: -77804646
-      char_blue_2_20: -157007000
-      char_blue_2_21: -660127629
+      char_blue_2_20_climb_1_3: -157007000
+      char_blue_2_21_climb_2_1: -660127629
       char_blue_2_22_attack_3_1: -896091928
       char_blue_2_23_attack_3_2: -896091928
       char_blue_2_24_attack_3_3: -1291867278

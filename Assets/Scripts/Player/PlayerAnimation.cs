@@ -54,13 +54,17 @@ public class PlayerAnimation : MonoBehaviour
         //跳跃动画
         anim.SetFloat("VelocityY", rb.velocity.y);
 
+        //检测是否在地面
         anim.SetBool("isGround", pc.IsGround);
 
+        //检测是否死亡
         anim.SetBool("isDeath", pcl.isDeath);
 
+        //检测是否攻击
         anim.SetBool("isAttack", pcl.isAttack);
 
-
+        //检测是否爬墙
+        anim.SetBool("isClimb", pcl.isClimb);
         
         //下蹲动画
         #region
@@ -95,7 +99,7 @@ public class PlayerAnimation : MonoBehaviour
 
     }
 
-    public void playerHurt()
+    public void PlayerHurt()
     {
         anim.SetTrigger("Hurt");
     }
@@ -106,6 +110,9 @@ public class PlayerAnimation : MonoBehaviour
         anim.SetTrigger("Attack");
     }
 
-
+    public void PlayerClimb()
+    {
+        anim.SetTrigger("Climb");
+    }
 
 }
