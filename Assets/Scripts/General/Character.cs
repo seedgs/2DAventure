@@ -6,10 +6,11 @@ using UnityEngine.Events;
 
 public class Character : MonoBehaviour
 {
+    [Header("最大血量")]
     public float maxHealth;
-
+    [Header("当前血量")]
     public float currentHealth;
-
+    [Header("无敌时间")]
     public float invulnerableDuration;
 
     private float invulnerableCounter;

@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
         //获取inputControl里面的 GamePalyer 里面的 Move 的 Vector2 存进inputDirection，但是这个Vector2需要ReadValue
 
         inputDirection = inputControl.GamePlayer.Move.ReadValue<Vector2>();
+        CheckStats();
+
     }
 
     //获取 PlayerInputControl(输入设备)，存进inputControl
@@ -44,6 +46,7 @@ public class PlayerController : MonoBehaviour
 
     //获取动画组件
     private PlayerAnimation playerAnimation;
+
 
     //title命名
     [Header("基本参数")]
@@ -69,9 +72,14 @@ public class PlayerController : MonoBehaviour
 
     public bool IsDead;
 
-    public bool isAttack;
+    public bool IsAttack;
 
+    public bool IsClimb;
 
+    [Header("材质")]
+    public PhysicsMaterial2D Normal;
+
+    public PhysicsMaterial2D Rock;
 
     private void Awake()
     {
@@ -91,6 +99,8 @@ public class PlayerController : MonoBehaviour
         originalOffset = coll.offset;
 
         originalSize = coll.size;
+
+        
 
         //攻击
         inputControl.GamePlayer.Attack.started += Attack;
@@ -122,7 +132,7 @@ public class PlayerController : MonoBehaviour
         };
         #endregion
 
-
+        
     }
 
 
@@ -153,7 +163,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(!IsHurt)
+        if(!IsHurt&!IsAttack)
         Move();
     }
 
@@ -257,7 +267,36 @@ public class PlayerController : MonoBehaviour
     private void Attack(InputAction.CallbackContext context)
     {
         playerAnimation.PlayerAttack();
-        isAttack = true;
-
+        IsAttack = true;
+        //当攻击的时候，横向速度为0，纵向速度不变
+        rb.velocity = new Vector2(0, rb.velocity.y);
     }
+
+    public void CheckStats()
+    {
+        //Rigidbody2D组件的Material（材质）
+        //如果在地面（isGround）的话为Rock
+        //如果不在地面（!isGround）的话为Normal
+        rb.sharedMaterial = physicsCheck.isGround ? Normal : Rock;
+    }
+
+    public void PlayerClimb()
+    {
+        playerAnimation.PlayerClimb();
+        IsClimb = true;
+        if (physicsCheck.isGround)
+        {
+            IsClimb = false;
+            inputControl.GamePlayer.Move.Enable();
+            Debug.Log("Move");
+        }
+        else if (!physicsCheck.isGround)
+        {
+            IsClimb = true;
+            inputControl.GamePlayer.Move.Disable();
+            Debug.Log("Not Move");
+        }
+ 
+    }
+
 }

@@ -54,7 +54,9 @@ public class PlayerAnimation : MonoBehaviour
 
         //攻击动画控制
         //关联PlayerController脚本的isAttack布尔值
-        anim.SetBool("isAttack", pcl.isAttack);
+        anim.SetBool("isAttack", pcl.IsAttack);
+
+        anim.SetBool("isClimb", pcl.IsClimb);
 
     }
 
@@ -69,5 +71,8 @@ public class PlayerAnimation : MonoBehaviour
         anim.SetTrigger("Attack");
     }
 
-
+    public void PlayerClimb()
+    {
+        anim.SetTrigger("Climb");
+    }
 }

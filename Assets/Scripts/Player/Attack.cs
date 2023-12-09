@@ -20,6 +20,7 @@ public class Attack : MonoBehaviour
         
         //这里是获取碰撞体（也就是野猪）Character的组件内的TakeDamage的方法，因为传递TakeDamage本身的参数，（）内为this
         collider.GetComponent<Character>()?.TakeDamage(this);
+
     }
 
 }
