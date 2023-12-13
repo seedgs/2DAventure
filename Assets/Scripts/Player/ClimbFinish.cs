@@ -20,7 +20,7 @@ public class ClimbFinish : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.GetComponent<PlayerController>().isClimb = false;
-        Debug.Log("isClimb = false");
+        //Debug.Log("isClimb = false");
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

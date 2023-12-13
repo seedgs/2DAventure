@@ -33,13 +33,19 @@ public class PlayerController : MonoBehaviour
         {
             //当滑落效果开始时，不允许人物左右操作
             inputControl.GamePlayer.Move.Disable();
-            Debug.Log("Move = Disable");
+            Debug.Log("Not Move");
+
+            //当人物碰墙的时候，添加一个向上的力（摩擦力）
+            Vector2 DownForce = new Vector2(0, climbForce);
+            //Debug.Log(transform.position.y);
+            rb.AddForce(DownForce/100, ForceMode2D.Impulse);
+
         }
         else if (physicsCheck.IsGround)
         {
             //当接触地面时，允许人物左右移动
             inputControl.GamePlayer.Move.Enable();
-            //Debug.Log("Move = Enable");
+            //Debug.Log("Move");
         }
 
 
@@ -68,6 +74,8 @@ public class PlayerController : MonoBehaviour
     //加载“灵巧”渲染器
     public SpriteRenderer sp;
 
+    public CapsuleCollider2D cc2;
+
 
     //title命名
     [Header("基本参数")]
@@ -81,11 +89,14 @@ public class PlayerController : MonoBehaviour
     //行走速度
     private float walkSpeed;
 
-    //当人物起跳时，添加一个瞬时向下的力
+    //当人物起跳时，添加一个瞬时向上的阻力
     public float jumpForce;
 
-    //当人物受伤时，添加一个瞬时横向的力
+    //当人物受伤时，添加一个瞬时横向的弹力
     public float hurtForce;
+
+    //当人物滑墙的时候，添加一个向上的阻力
+    public float climbForce;
 
     //检测受伤的布尔值
     public bool isHurt;
@@ -117,6 +128,8 @@ public class PlayerController : MonoBehaviour
         physicsCheck = GetComponent<PhysicsCheck>();
 
         PlayerAnimation = GetComponent<PlayerAnimation>();
+
+        cc2 = GetComponent<CapsuleCollider2D>();
 
         inputControl = new PlayerInputControl();
         //started那就按下那一刻
@@ -267,7 +280,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    //向跳跃施加一个向上的力
+    //向跳跃施加一个向下的阻力
     #region
     private void Jump(InputAction.CallbackContext context)
     {
@@ -343,8 +356,7 @@ public class PlayerController : MonoBehaviour
     //材质的判定
     public void CheckMaterial()
     {
-        rb.sharedMaterial = physicsCheck.IsGround ? Normal : Rock;
-        
+        cc2.sharedMaterial = physicsCheck.IsGround ? Normal : Rock;
     }
 
 
@@ -354,8 +366,7 @@ public class PlayerController : MonoBehaviour
         //检测是否触地面
         if (!physicsCheck.IsGround)
             isClimb = true;
-        PlayerAnimation.PlayerClimb();
-            
+        PlayerAnimation.PlayerClimb(); 
     }
 
 }
