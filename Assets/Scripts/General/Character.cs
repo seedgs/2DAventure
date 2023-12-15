@@ -5,6 +5,9 @@ using UnityEngine.Events;
 
 public class Character : MonoBehaviour
 {
+
+    private PlayerController pc;
+
     [Header("基本参数")]
     public float maxHealth;
 
@@ -14,6 +17,7 @@ public class Character : MonoBehaviour
     //无敌持续时间
     //这个是可以手动输入的
     public float invulnerableDuration;
+
 
     //无敌时的计数器
     private float invulnerableCounter;
@@ -46,15 +50,18 @@ public class Character : MonoBehaviour
                 //无敌开关闭上（不打钩）
                 invulnerable = false;
             }
+
+        pc = GetComponent<PlayerController>();
     }
 
     //()里面Attack是Attack脚本的命名，attacker是自己命名的
     public void takeTrauma(Attack attacker)
     {
         //如果无敌的时候，不执行下面的扣血伤害
+        //或者当人物滑铲状态下，也不执行下面的扣血伤害
         //不执行的话就返回到Update上面由头执行
         //()为invulnerable = true
-        if (invulnerable)
+        if (invulnerable || pc.isGlissade)
             return;
 
 
@@ -80,7 +87,7 @@ public class Character : MonoBehaviour
 
         }
         //否则，人物血量直接为0
-        else
+        else if(currentHealth - attacker.trauma <= 0)
         {
             //人物死亡
             currentHealth = 0;

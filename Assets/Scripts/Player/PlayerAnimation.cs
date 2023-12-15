@@ -65,6 +65,12 @@ public class PlayerAnimation : MonoBehaviour
 
         //检测是否爬墙
         anim.SetBool("isClimb", pcl.isClimb);
+
+        //检测是否滑步
+        anim.SetBool("isGlissade", pcl.isGlissade);
+
+        //检测是否受伤
+        anim.SetBool("isHurt", pcl.isHurt);
         
         //下蹲动画
         #region
@@ -114,6 +120,11 @@ public class PlayerAnimation : MonoBehaviour
     public void PlayerClimb()
     {
         anim.SetTrigger("Climb");
+    }
+
+    public void PlayerGlissade()
+    {
+        anim.SetTrigger("Glissade");
     }
 
 }

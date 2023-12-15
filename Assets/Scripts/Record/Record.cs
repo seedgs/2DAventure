@@ -129,7 +129,7 @@ public class Record : MonoBehaviour
 
     //region
 
-    //is Trigger一定要要勾选（否则无法产生碰撞）
+    //is Trigger一定要勾选（否则无法产生碰撞）
     //在Layer Overrides-contack Caputure Layers选择取消选择nothing，选择Enemy（这个操作是因为认为在建立攻击范围的时候，会砍到自身从而造成自身扣血的状况，选择Enemy后，就只会对Enemy层的物体造成伤害）
     //以上操作在Attack01、Attack02、Attack03层都需要
 

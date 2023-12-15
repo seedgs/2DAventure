@@ -49,6 +49,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Glissade",
+                    "type": "Button",
+                    "id": "53b82a9b-8825-4bcc-a9cc-0bd8b93c843f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -236,6 +245,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "SquatDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "353c93fb-726c-4e92-abb6-37cb0b5d2851",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Glissade",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

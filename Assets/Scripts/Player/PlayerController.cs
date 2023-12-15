@@ -7,6 +7,8 @@ using UnityEngine.PlayerLoop;
 
 public class PlayerController : MonoBehaviour
 {
+
+
     // Start is called before the first frame update
     //测试测试测试测试测试
     void Start()
@@ -16,11 +18,14 @@ public class PlayerController : MonoBehaviour
 
     // Update is called once per frame
 
-    //每一帧都坚持按键的输入
+    //与FixedUpdate()一样都是每帧更新，
+    //Update()是平均帧率更新（系统设置）
+    //FixedUpdate()是固定帧更新（人为设置）
     void Update()
     {
+
         //获取inputControl里面的 GamePalyer 里面的 Move 的 Vector2 存进inputDirection，但是这个Vector2需要ReadValue
-        
+
         inputDirection =inputControl.GamePlayer.Move.ReadValue<Vector2>();
         CheckMaterial();
 
@@ -28,7 +33,6 @@ public class PlayerController : MonoBehaviour
         if (physicsCheck.IsGround)
             isClimb = false;
 
-        
         if (isClimb)
         {
             //当滑落效果开始时，不允许人物左右操作
@@ -41,20 +45,20 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(DownForce/100, ForceMode2D.Impulse);
 
         }
-        else if (physicsCheck.IsGround)
+        else if (physicsCheck.IsGround && !isDeath)
         {
-            //当接触地面时，允许人物左右移动
+            //当接触地面时,且不是死亡的时候，允许人物左右移动
             inputControl.GamePlayer.Move.Enable();
             //Debug.Log("Move");
         }
 
+        //开启滑步方法
+        CheckGlissade();
 
     }
 
 
     
-
-
     //方法
     #region
     public PhysicsCheck physicsCheck;
@@ -76,10 +80,16 @@ public class PlayerController : MonoBehaviour
 
     public CapsuleCollider2D cc2;
 
+    public Character cha;
+
+    #endregion
+
+
 
     //title命名
     [Header("基本参数")]
 
+    #region
     //速度
     public float speed;
 
@@ -98,6 +108,9 @@ public class PlayerController : MonoBehaviour
     //当人物滑墙的时候，添加一个向上的阻力
     public float climbForce;
 
+    //当人物滑铲的时候，添加一个向前的力
+    public float glissadeForce;
+
     //检测受伤的布尔值
     public bool isHurt;
 
@@ -110,8 +123,8 @@ public class PlayerController : MonoBehaviour
     //爬墙布尔值
     public bool isClimb;
 
-
-    #endregion
+    //滑步的布尔值
+    public bool isGlissade;
 
 
     [Header("物理材质")]
@@ -119,6 +132,40 @@ public class PlayerController : MonoBehaviour
     public PhysicsMaterial2D Normal;
 
     public PhysicsMaterial2D Rock;
+
+    #endregion
+
+
+
+
+    #region
+    //滑步参数
+    private float LeftTimer = 0;
+
+    private float RightTimer = 0;
+
+    //enum为枚举方法
+    public enum clickRightCount
+    {
+        //第一个参数默认为 firstRightTime = 0，第二个参数 econdRightTime = 1，以此类推
+        firstRightTime,
+        secondRightTime,
+        zeroRightTime,
+    }
+
+    public enum clickLeftCount
+    {
+        firstLefttime,
+        secondLefttime,
+        zeroLeftTime,
+    }
+
+    clickRightCount Right = clickRightCount.zeroRightTime;
+
+    clickLeftCount Left = clickLeftCount.zeroLeftTime;
+
+    #endregion
+
 
 
     private void Awake()
@@ -131,12 +178,13 @@ public class PlayerController : MonoBehaviour
 
         cc2 = GetComponent<CapsuleCollider2D>();
 
+        cha = GetComponent<Character>();
+
         inputControl = new PlayerInputControl();
         //started那就按下那一刻
         //把Jump这个函数方法添加到你按键按下的按键按下的那一刻（started）里面执行
         inputControl.GamePlayer.Jump.started += Jump;
 
-       
 
 
         //攻击判定
@@ -145,6 +193,7 @@ public class PlayerController : MonoBehaviour
         inputControl.GamePlayer.Attack.started += PlayerAttack;
 
         #endregion
+
 
 
         //蹲下判定
@@ -193,7 +242,6 @@ public class PlayerController : MonoBehaviour
         };
         #endregion
 
-
     }
 
     
@@ -217,6 +265,9 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    //与Update()一样都是每帧更新，
+    //Update()是平均帧率更新（系统设置）
+    //FixedUpdate()是固定帧更新（人为设置）
     private void FixedUpdate()
     {
         if (!isHurt && !isAttack)
@@ -299,6 +350,9 @@ public class PlayerController : MonoBehaviour
     //施加一个反弹力
     public void getHurt(Transform attacker)
     {
+        //滑铲状态下无伤通过
+        if (!isGlissade)
+
         isHurt = true;
         //受伤的时候，停止一切操控，所以velocity的x和y轴方向速度都为0
         rb.velocity = Vector2.zero;
@@ -369,4 +423,118 @@ public class PlayerController : MonoBehaviour
         PlayerAnimation.PlayerClimb(); 
     }
 
+
+    //双击检测滑铲
+    public void CheckGlissade()
+    {
+
+        //滑铲需求
+        #region
+        //双击方向键来触发滑铲
+        //当滑铲状态触发时候，如果此时触碰敌人，可以无敌通过来进行躲避
+
+        //参考：https://blog.51cto.com/u_8378185/5990608
+        #endregion
+
+        //方法解析：
+        #region
+
+        //0、LeftTimer -= Time.deltaTime 一开始就从0开始递减，并且计算两帧之间的差值
+        //1、从0开始递减，触发 Left = clickLeftCount.zeroLeftTime 这个枚举条件
+        //1、当我按下按键（非抬起）的时候，执行LeftTimer = 0.2f（也就是Time.deltaTime从0.2开始递减）
+        //2、当我按抬起按键的时候，执行标记Left = clickLeftCount.secondLefttime（根据枚举，Left数值为1）
+        //3、如果需要触发双击的效果，需要满足以下三个条件
+        //rb.velocity.x < 0
+        //Left == clickLeftCount.secondLefttime
+        //LeftTimer > 0f
+        //由于Time.deltaTime会从0.2快速递减，当我在递减至0这个的时候再次点击按键，就可以满足双击的条件，触发滑铲效果
+
+        #endregion
+
+
+
+        //按左键的检验
+        #region
+
+        //Time.deltaTime是两帧之间的差值
+        LeftTimer -= Time.deltaTime;
+
+        if (LeftTimer < 0f)
+        {
+            Left = clickLeftCount.zeroLeftTime;
+        }
+
+        //当按下A键后
+        if (Input.GetKeyDown(KeyCode.A) && Left == clickLeftCount.zeroLeftTime)
+        {
+            LeftTimer = 0.2f;
+            Left = clickLeftCount.firstLefttime;
+        }
+
+        //当抬起A键后
+        if (Input.GetKeyUp(KeyCode.A) && Left == clickLeftCount.firstLefttime)
+        {
+            Left = clickLeftCount.secondLefttime;
+            isGlissade = false;
+            //Vector2 gForce = new Vector2(glissadeForce, 0);
+            //rb.AddRelativeForce(transform.localPosition * gForce);
+        }
+        
+        //双击A键后
+        if (Input.GetKey(KeyCode.A) && Left == clickLeftCount.secondLefttime && LeftTimer > 0f)
+        {
+            Left = clickLeftCount.zeroLeftTime;
+            isGlissade = true;
+            PlayerAnimation.PlayerGlissade();
+
+            //人物滑铲的时候，关闭无敌动画，但是可以穿过敌人
+            isHurt = false;
+            //取消无敌动画
+            cha.invulnerable = false;
+        }
+        #endregion
+
+
+
+        //按右键的检验
+        #region
+
+        RightTimer -= Time.deltaTime;
+
+        if (RightTimer < 0f)
+        {
+            Right = clickRightCount.zeroRightTime;
+        }
+
+        //当按下D键后
+
+        if (Input.GetKeyDown(KeyCode.D) && Right == clickRightCount.zeroRightTime)
+        {
+            RightTimer = 0.2f;
+            Right = clickRightCount.firstRightTime;
+        }
+
+        //当抬起D键后
+        if (Input.GetKeyUp(KeyCode.D) && Right == clickRightCount.firstRightTime)
+        {
+            Right = clickRightCount.secondRightTime;
+        }
+
+        //双击D键后
+        if (Input.GetKey(KeyCode.D) && Right == clickRightCount.secondRightTime && RightTimer > 0f)
+        {
+            Right = clickRightCount.zeroRightTime;
+            isGlissade = true;
+            PlayerAnimation.PlayerGlissade();
+
+            //人物滑铲的时候，关闭无敌动画，但是可以穿过敌人
+            isHurt = false;
+            //取消无敌动画
+            cha.invulnerable = false;
+        }
+
+        #endregion
+    }
+
+    
 }
