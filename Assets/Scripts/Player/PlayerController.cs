@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.PlayerLoop;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
@@ -55,13 +56,21 @@ public class PlayerController : MonoBehaviour
         //开启滑步方法
         CheckGlissade();
 
+        //当滑铲结束的时候，恢复野猪Capsule Collider 2D组件显示
+        if (!isGlissade)
+        {
+            Boar.GetComponentInChildren<CapsuleCollider2D>().enabled = true;
+        }
+        
+
+
     }
 
 
     
     //方法
     #region
-    public PhysicsCheck physicsCheck;
+    private PhysicsCheck physicsCheck;
 
     //获取 PlayerInputControl(输入设备)，存进inputControl
     //PlayerInputControl在Seetings文件夹里面的InputSystem文件里面
@@ -70,17 +79,20 @@ public class PlayerController : MonoBehaviour
     public Vector2 inputDirection;
 
     //获取PlayerAnimation脚本组件
-    public PlayerAnimation PlayerAnimation;
+    private PlayerAnimation PlayerAnimation;
 
     //加载刚体
     public Rigidbody2D rb;
 
+
     //加载“灵巧”渲染器
     public SpriteRenderer sp;
 
-    public CapsuleCollider2D cc2;
+    private CapsuleCollider2D cc2;
 
-    public Character cha;
+    public GameObject Boar;
+
+
 
     #endregion
 
@@ -167,6 +179,9 @@ public class PlayerController : MonoBehaviour
     #endregion
 
 
+    [Header("事件")]
+    public UnityEvent OffTakeTruma;
+
 
     private void Awake()
     {
@@ -177,8 +192,6 @@ public class PlayerController : MonoBehaviour
         PlayerAnimation = GetComponent<PlayerAnimation>();
 
         cc2 = GetComponent<CapsuleCollider2D>();
-
-        cha = GetComponent<Character>();
 
         inputControl = new PlayerInputControl();
         //started那就按下那一刻
@@ -352,20 +365,23 @@ public class PlayerController : MonoBehaviour
     {
         //滑铲状态下无伤通过
         if (!isGlissade)
+        {
+            isHurt = true;
+            //受伤的时候，停止一切操控，所以velocity的x和y轴方向速度都为0
+            rb.velocity = Vector2.zero;
 
-        isHurt = true;
-        //受伤的时候，停止一切操控，所以velocity的x和y轴方向速度都为0
-        rb.velocity = Vector2.zero;
+            //人物受伤后反弹的距离是当前人物的X轴数值 减去 被碰撞（野猪）的当前的X轴的数值
+            //例子：人物在x轴数值为1，野猪x轴数值为0，相减为1，人物反弹1的距离
+            //但是如果人物距离野猪很远，人物x轴数值为100的话，野猪不变，相减为100，人物反弹力为100
+            //添加.normalized就是无论相减为多少，都在0-1之间，就是说把相减的数值归1化
+            Vector2 dir = new Vector2((transform.position.x - attacker.position.x), 0).normalized;
+
+            rb.AddForce(dir * hurtForce, ForceMode2D.Impulse);
+
+            PlayerAnimation.PlayerHurt();
+        }
+
         
-        //人物受伤后反弹的距离是当前人物的X轴数值 减去 被碰撞（野猪）的当前的X轴的数值
-        //例子：人物在x轴数值为1，野猪x轴数值为0，相减为1，人物反弹1的距离
-        //但是如果人物距离野猪很远，人物x轴数值为100的话，野猪不变，相减为100，人物反弹力为100
-        //添加.normalized就是无论相减为多少，都在0-1之间，就是说把相减的数值归1化
-        Vector2 dir = new Vector2((transform.position.x - attacker.position.x), 0).normalized;
-
-        rb.AddForce(dir * hurtForce, ForceMode2D.Impulse);
-
-        PlayerAnimation.PlayerHurt();
 
     }
 
@@ -456,6 +472,8 @@ public class PlayerController : MonoBehaviour
         //按左键的检验
         #region
 
+        
+
         //Time.deltaTime是两帧之间的差值
         LeftTimer -= Time.deltaTime;
 
@@ -478,19 +496,27 @@ public class PlayerController : MonoBehaviour
             isGlissade = false;
             //Vector2 gForce = new Vector2(glissadeForce, 0);
             //rb.AddRelativeForce(transform.localPosition * gForce);
+
+            
         }
         
         //双击A键后
         if (Input.GetKey(KeyCode.A) && Left == clickLeftCount.secondLefttime && LeftTimer > 0f)
         {
             Left = clickLeftCount.zeroLeftTime;
+
+            //打开滑铲检测开关
             isGlissade = true;
+
+            //当滑铲开始的时候，隐藏野猪（Boar）Capsule Collider 2D组件
+            Boar.GetComponentInChildren<CapsuleCollider2D>().enabled = false;
+
+            //开启滑铲动画
             PlayerAnimation.PlayerGlissade();
 
             //人物滑铲的时候，关闭无敌动画，但是可以穿过敌人
             isHurt = false;
-            //取消无敌动画
-            cha.invulnerable = false;
+
         }
         #endregion
 
@@ -524,13 +550,20 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.D) && Right == clickRightCount.secondRightTime && RightTimer > 0f)
         {
             Right = clickRightCount.zeroRightTime;
+
+            //打开滑铲检测开关
             isGlissade = true;
+
+            //当滑铲开始的时候，隐藏野猪（Boar）Capsule Collider 2D组件
+            Boar.GetComponentInChildren<CapsuleCollider2D>().enabled = false;
+
+            //开启滑铲动画
             PlayerAnimation.PlayerGlissade();
 
             //人物滑铲的时候，关闭无敌动画，但是可以穿过敌人
             isHurt = false;
-            //取消无敌动画
-            cha.invulnerable = false;
+
+            
         }
 
         #endregion

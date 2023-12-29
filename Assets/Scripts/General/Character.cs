@@ -42,14 +42,14 @@ public class Character : MonoBehaviour
     //Update每次检测
     private void Update()
     {
-            //开始计数（倒计时）
-            invulnerableCounter -= Time.deltaTime;
-            //当倒计时为0的时候
-            if (invulnerableCounter <= 0)
-            {
-                //无敌开关闭上（不打钩）
-                invulnerable = false;
-            }
+        //开始计数（倒计时）
+        invulnerableCounter -= Time.deltaTime;
+        //当倒计时为0的时候
+        if (invulnerableCounter <= 0)
+        {
+            //无敌开关闭上（不打钩）
+            invulnerable = false;
+        }
 
         pc = GetComponent<PlayerController>();
     }
@@ -61,7 +61,7 @@ public class Character : MonoBehaviour
         //或者当人物滑铲状态下，也不执行下面的扣血伤害
         //不执行的话就返回到Update上面由头执行
         //()为invulnerable = true
-        if (invulnerable || pc.isGlissade)
+        if (invulnerable)
             return;
 
 
@@ -87,24 +87,26 @@ public class Character : MonoBehaviour
 
         }
         //否则，人物血量直接为0
-        else if(currentHealth - attacker.trauma <= 0)
+        else if (currentHealth - attacker.trauma <= 0)
         {
             //人物死亡
             currentHealth = 0;
             osDeath?.Invoke();
         }
 
- 
+
     }
 
 
     private void TriggerInvulnerAble()
     {
-            //无敌的布尔值打开（打钩）
-            invulnerable = true;
+        //无敌的布尔值打开（打钩）
+        invulnerable = true;
 
-            //无敌的持续时间 等于 认为设定的无敌时间
-            invulnerableCounter = invulnerableDuration;
+        //无敌的持续时间 等于 认为设定的无敌时间
+        invulnerableCounter = invulnerableDuration;
+
+
     }
 
 

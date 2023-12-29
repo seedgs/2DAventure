@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GlissadeFinish : StateMachineBehaviour
 {
+    
+    
+    
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     //{
@@ -20,6 +23,7 @@ public class GlissadeFinish : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.GetComponent<PlayerController>().isGlissade = false;
+        
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

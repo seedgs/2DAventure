@@ -9,7 +9,7 @@ public class PlayerAnimation : MonoBehaviour
 
     private Rigidbody2D rb;
 
-    private bool Atk;
+    public bool Atk;
 
     private bool Sd;
 
@@ -35,9 +35,9 @@ public class PlayerAnimation : MonoBehaviour
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         pc = GetComponent<PhysicsCheck>();
-        Atk = false;
         cc = GetComponent<CapsuleCollider2D>();
         pcl = GetComponent<PlayerController>();
+        Atk = false;
     }
     
     private void Update()
