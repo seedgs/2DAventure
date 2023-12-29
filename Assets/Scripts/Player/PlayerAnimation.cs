@@ -5,9 +5,9 @@ using UnityEngine;
 public class PlayerAnimation : MonoBehaviour
 {
 
-    private Animator anim;
+    public Animator anim;
 
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
 
     public bool Atk;
 
