@@ -17,11 +17,13 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    // Update is called once per frame
 
+    //方法注释
+    #region
     //与FixedUpdate()一样都是每帧更新，
     //Update()是平均帧率更新（系统设置）
     //FixedUpdate()是固定帧更新（人为设置）
+    #endregion
     void Update()
     {
 
@@ -61,13 +63,11 @@ public class PlayerController : MonoBehaviour
         {
             Boar.GetComponentInChildren<CapsuleCollider2D>().enabled = true;
         }
+
         
-
-
     }
 
 
-    
     //方法
     #region
     private PhysicsCheck physicsCheck;
@@ -139,6 +139,7 @@ public class PlayerController : MonoBehaviour
     public bool isGlissade;
 
 
+
     [Header("物理材质")]
 
     public PhysicsMaterial2D Normal;
@@ -146,7 +147,6 @@ public class PlayerController : MonoBehaviour
     public PhysicsMaterial2D Rock;
 
     #endregion
-
 
 
 
@@ -193,11 +193,11 @@ public class PlayerController : MonoBehaviour
 
         cc2 = GetComponent<CapsuleCollider2D>();
 
+
         inputControl = new PlayerInputControl();
         //started那就按下那一刻
         //把Jump这个函数方法添加到你按键按下的按键按下的那一刻（started）里面执行
         inputControl.GamePlayer.Jump.started += Jump;
-
 
 
         //攻击判定
@@ -206,8 +206,6 @@ public class PlayerController : MonoBehaviour
         inputControl.GamePlayer.Attack.started += PlayerAttack;
 
         #endregion
-
-
 
         //蹲下判定
         #region
@@ -231,9 +229,12 @@ public class PlayerController : MonoBehaviour
         //跑步就是速度的数值
         runSpeed = speed;
 
+        //方法注释
+        #region
         //获取控制中控制走路的组件，在“按下”(performed)的时候,调用回调函数(+= ctx =>)
         //回调函数检测人物碰撞地面后开始执行
         //“按下”后为走路模式
+        #endregion
         inputControl.GamePlayer.Walkbutton.performed += ctx =>
         {
             if (physicsCheck.IsGround)
@@ -242,10 +243,12 @@ public class PlayerController : MonoBehaviour
             }
         };
 
-        
+        //方法注释
+        #region
         //获取控制中控制走路的组件，在“松开”(canceled)的时候,调用回调函数(+= ctx =>)
         //回调函数检测人物碰撞地面后开始执行
         //“松开”后为跑步模式
+        #endregion
         inputControl.GamePlayer.Walkbutton.canceled += ctx =>
         {
             if (physicsCheck.IsGround)
@@ -254,13 +257,10 @@ public class PlayerController : MonoBehaviour
             }
         };
         #endregion
-
     }
 
-    
 
     //跳跃方法
-
 
     //当前物体启动的时候
     private void OnEnable()
@@ -277,24 +277,17 @@ public class PlayerController : MonoBehaviour
         inputControl.Disable();
     }
 
-
+    //方法注释
+    #region
     //与Update()一样都是每帧更新，
     //Update()是平均帧率更新（系统设置）
     //FixedUpdate()是固定帧更新（人为设置）
+    #endregion
     private void FixedUpdate()
     {
         if (!isHurt && !isAttack)
         Move();
     }
-
-
-    //测试
-    //OnTriggerStay2D为当触发器接触的时候，进行碰撞检测
-    //private void OnTriggerStay2D(Collider2D collision)
-    //{
-    //    Debug.Log(collision.name);
-    //}
-
 
     //移动方法
     #region
@@ -302,9 +295,12 @@ public class PlayerController : MonoBehaviour
     {
         rb.velocity = new Vector2(inputDirection.x * speed * Time.deltaTime, rb.velocity.y);
 
+        //方法注释
+        #region
         //方法1
         //这个方法是用了Sprite Renderer里面的Flip的X轴是被点选（也就是布尔值的True和Flase）来判断
         //Sprite Renderer里面的Flip是，沿着裁剪图片时设定的焦点来进行镜像翻转
+        #endregion
         if (inputDirection.x > 0)
         {
             sp.flipX = false;
@@ -355,8 +351,6 @@ public class PlayerController : MonoBehaviour
         if (physicsCheck.IsGround)
         rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
 
-        
-
     }
     #endregion
 
@@ -364,24 +358,27 @@ public class PlayerController : MonoBehaviour
     public void getHurt(Transform attacker)
     {
         //滑铲状态下无伤通过
-        if (!isGlissade)
+        //!Boar.GetComponent<EnemyController>().isRun 进入野猪视野范围，判定为奔跑
+        if (!isGlissade && !Boar.GetComponent<EnemyController>().isRun)
         {
+            
             isHurt = true;
             //受伤的时候，停止一切操控，所以velocity的x和y轴方向速度都为0
             rb.velocity = Vector2.zero;
 
+            //方法注释
+            #region
             //人物受伤后反弹的距离是当前人物的X轴数值 减去 被碰撞（野猪）的当前的X轴的数值
             //例子：人物在x轴数值为1，野猪x轴数值为0，相减为1，人物反弹1的距离
             //但是如果人物距离野猪很远，人物x轴数值为100的话，野猪不变，相减为100，人物反弹力为100
             //添加.normalized就是无论相减为多少，都在0-1之间，就是说把相减的数值归1化
+            #endregion
             Vector2 dir = new Vector2((transform.position.x - attacker.position.x), 0).normalized;
 
             rb.AddForce(dir * hurtForce, ForceMode2D.Impulse);
 
             PlayerAnimation.PlayerHurt();
         }
-
-        
 
     }
 
@@ -473,7 +470,6 @@ public class PlayerController : MonoBehaviour
         #region
 
         
-
         //Time.deltaTime是两帧之间的差值
         LeftTimer -= Time.deltaTime;
 
@@ -521,7 +517,6 @@ public class PlayerController : MonoBehaviour
         #endregion
 
 
-
         //按右键的检验
         #region
 
@@ -562,10 +557,7 @@ public class PlayerController : MonoBehaviour
 
             //人物滑铲的时候，关闭无敌动画，但是可以穿过敌人
             isHurt = false;
-
-            
         }
-
         #endregion
     }
 

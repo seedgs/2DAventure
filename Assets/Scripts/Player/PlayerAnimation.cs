@@ -110,6 +110,8 @@ public class PlayerAnimation : MonoBehaviour
         anim.SetTrigger("Hurt");
     }
 
+
+
     //攻击动画
     public void PlayerAttack()
     {
