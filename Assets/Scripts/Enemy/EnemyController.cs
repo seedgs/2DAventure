@@ -13,13 +13,21 @@ public class EnemyController : MonoBehaviour
 
     public SpriteRenderer sp;
 
+    public Character ch;
+
 
     [Header("基础信息")]
     public float normalSpeed;
 
     public float currentSpeed;
 
-    
+    public float hurtForce;
+
+    public Transform attacker;
+
+    [Header("计数器")]
+
+
 
     public float chaseSpeed;
 
@@ -28,6 +36,10 @@ public class EnemyController : MonoBehaviour
     public bool isRun;
 
     public bool isWalk;
+
+    public bool isHurt;
+
+    public bool isDead;
 
     //public bool isRetreat;
 
@@ -51,6 +63,8 @@ public class EnemyController : MonoBehaviour
 
         sp = GetComponent<SpriteRenderer>();
 
+        ch = GetComponent<Character>();
+
         currentSpeed = normalSpeed;
     }
 
@@ -67,7 +81,11 @@ public class EnemyController : MonoBehaviour
     #endregion
     public void FixedUpdate()
     {
-        boarMove();
+        if (!isHurt)
+        {
+            boarMove();
+        }
+        
         isWalk = true;
         transform.GetComponentInChildren<EdgeCollider2D>().enabled = true;
         boarNoRun();
@@ -119,7 +137,95 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    public void onTakeTruma(Transform attacktrans)
+    {
+        attacker = attacktrans;
 
+
+        //转身
+        #region
+
+        //人物在野猪的左侧
+        //人物x坐标数值永远比野猪x坐标数值要小，所以他们的差值永远小于0
+        //此时需要野猪朝着人物（左侧）方面转过来
+        if (attacktrans.position.x -transform.position.x < 0)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+
+        //人物在野猪的右侧
+        //人物x坐标数值永远比野猪x坐标数值要大，所以他们的差值永远大于0
+        //此时需要野猪朝着人物（右侧）方面转过来
+        if (attacktrans.position.x - transform.position.x > 0)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+
+        #endregion
+
+
+
+        //受伤被击退
+        #region
+        isHurt = true;
+        anim.SetTrigger("Hurt");
+
+        Vector2 Dir = new Vector2(transform.position.x - attacktrans.position.x, 0).normalized;
+
+        //固定写法，执行下面的协同器StartCoroutine(协同器函数名以及传参)
+        StartCoroutine(onHurt(Dir));
+
+        #endregion
+    }
+
+
+
+
+    //IEnumerator为协同程序
+    #region
+    IEnumerator onHurt(Vector2 Dir)
+    {
+        //下面括号内的Dir是上一个函数里面的数值，这里如果要使用Dir参数，上面函数需要调用Dir
+        rb.AddForce(Dir * hurtForce, ForceMode2D.Impulse);
+
+
+        //以下固定顺序yield return null;  ruturn后面必须有值，可以是null，null的意思是执行完上一帧就直接执行下一帧
+        //new waitForSecond(0.45f)意思是执行括号内的固定秒数后代码再往下执行，相当于延迟器
+        yield return new WaitForSeconds(0.45f);
+        isHurt = false;
+    }
+    #endregion
+
+
+    //执行死亡动画
+    public void onDead()
+    {
+        if (ch.currentHealth == 0)
+        {
+            //当执行死亡动画的时候，野猪马上切换碰撞图层，该图层已经设置为不与玩家（角色）残生碰撞
+            //layer的设置，(寻找路径)edit --> project setting --> physics 2D --> Layerer Collision Matrix
+            gameObject.layer = 2;
+            Debug.Log("Dead");
+            isDead = true;
+            anim.SetBool("Dead",isDead);
+            
+        }
+    }
+
+
+
+    //死亡后执行销毁
+    public void destoryGameobject()
+    {
+        Destroy(this.gameObject);
+    }
+
+
+    //死亡后执行隐藏
+    public void hiddenGameobject()
+    {
+        gameObject.SetActive(false);
+    }
 
     ////野猪退后
     //public virtual void boarAgainAttack()

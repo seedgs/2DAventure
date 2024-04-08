@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
         //当滑铲结束的时候，恢复野猪Capsule Collider 2D组件显示
         if (!isGlissade)
         {
-            Boar.GetComponentInChildren<CapsuleCollider2D>().enabled = true;
+            //Boar.GetComponentInChildren<CapsuleCollider2D>().enabled = true; 
         }
 
         
