@@ -4,75 +4,129 @@ using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
 {
-    private Animator anim;
 
-    private Rigidbody2D rb;
+    public Animator anim;
+
+    public Rigidbody2D rb;
+
+    public bool Atk;
+
+    private bool Sd;
 
     private PhysicsCheck pc;
 
+    private CapsuleCollider2D cc;
+
     private PlayerController pcl;
 
-    private void Awake()
+
+    //ä¸‹è¹²åˆšä½“æ•°å€¼
+    #region
+    //ä¸‹è¹²ç¬é—´çš„åˆšä½“æ•°å€¼
+    private Vector2 setOffsetDown = new(-0.0944f, 0.79f);
+    private Vector2 setSizeDown = new(0.48678f, 1.57f);
+    //èµ·èº«ç¬é—´çš„åˆšä½“æ•°å€¼
+    private Vector2 setOffsetUp = new(-0.09440199f, 0.939046f);
+    private Vector2 setSizeUp = new(0.4867882f, 1.878092f);
+    #endregion
+
+    public void Awake()
     {
-        //»ñÈ¡Animator(¶¯»­)×é¼ş
         anim = GetComponent<Animator>();
-
-        //»ñÈ¡Rigidbody2D(¸ÕÌå)×é¼ş
         rb = GetComponent<Rigidbody2D>();
-
-        //»ñÈ¡PhysicsCheck½Å±¾×é¼ş
         pc = GetComponent<PhysicsCheck>();
-
-        //»ñÈ¡PlayerController½Å±¾×é¼ş
+        cc = GetComponent<CapsuleCollider2D>();
         pcl = GetComponent<PlayerController>();
+        Atk = false;
     }
-
+    
     private void Update()
     {
-        //Ã¿Ò»Ö¡¶¼ÒªÖ´ĞĞ
-        setAnimation();
-    }
-
-    public void setAnimation()
-    {
-        //VelocityÊÇAnimatorÖĞ×Ô¶¨ÒåµÄ²ÎÊı
-        //rb.velocity.x¾ÍÊÇÈËÎïÒÆ¶¯µÄÊ±ºò¸ÕÌå×é¼şµÄºáÖáËÙ¶È
-        anim.SetFloat("VelocityX", Mathf.Abs(rb.velocity.x));
-
-        //VelocityÊÇAnimatorÖĞ×Ô¶¨ÒåµÄ²ÎÊı
-        //rb.velocity.y¾ÍÊÇÈËÎïÒÆ¶¯µÄÊ±ºò¸ÕÌå×é¼şµÄ×İÖáËÙ¶È
-        anim.SetFloat("VelocityY", rb.velocity.y);
-
-        //IsGroundÊÇ¼ì²â¸ÕÌåÊÇ´¥ÅöµØÃæµÄ²¼¶ûÖµ£¬Îªtrue±íÊ¾ÈËÎïÔÚµØÃæÉÏ£¬Îªfalse±íÊ¾ÈËÎï²»ÔÚµØÃæÉÏ
-        //²»ÔÚÔÚµØÃæÉÏµÄÊ±ºò¶¯»­²¥·Å
-        anim.SetBool("IsGround", pc.isGround);
-
-        //ÏÂ¶×¶¯»­¿ØÖÆ
-        anim.SetBool("IsCrouch", pcl.IsCrouch);
-
-        anim.SetBool("IsDead", pcl.IsDead);
-
-        //¹¥»÷¶¯»­¿ØÖÆ
-        //¹ØÁªPlayerController½Å±¾µÄisAttack²¼¶ûÖµ
-        anim.SetBool("isAttack", pcl.IsAttack);
-
-        anim.SetBool("isClimb", pcl.IsClimb);
-
-    }
-
-    public void playerHurt()
-    {
-        anim.SetTrigger("IsHurt");
+        setanimation();
         
     }
 
+    public void setanimation()
+    {
+        //è·‘æ­¥åŠ¨ç”»
+        anim.SetFloat("VelocityX", Mathf.Abs(rb.velocity.x));
+
+        //è·³è·ƒåŠ¨ç”»
+        anim.SetFloat("VelocityY", rb.velocity.y);
+
+        //æ£€æµ‹æ˜¯å¦åœ¨åœ°é¢
+        anim.SetBool("isGround", pc.IsGround);
+
+        //æ£€æµ‹æ˜¯å¦æ­»äº¡
+        anim.SetBool("isDeath", pcl.isDeath);
+
+        //æ£€æµ‹æ˜¯å¦æ”»å‡»
+        anim.SetBool("isAttack", pcl.isAttack);
+
+        //æ£€æµ‹æ˜¯å¦çˆ¬å¢™
+        anim.SetBool("isClimb", pcl.isClimb);
+
+        //æ£€æµ‹æ˜¯å¦æ»‘æ­¥
+        anim.SetBool("isGlissade", pcl.isGlissade);
+
+        //æ£€æµ‹æ˜¯å¦å—ä¼¤
+        anim.SetBool("isHurt", pcl.isHurt);
+        
+        //ä¸‹è¹²åŠ¨ç”»
+        #region
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            Sd = true;
+
+            //å½“ä¸‹è¹²ç¬é—´ï¼Œåˆšä½“è½®å»“çš„æ•°å€¼å˜æ¢
+            cc.offset = setOffsetDown;
+            cc.size = setSizeDown;
+            //Debug.Log("squatDown");
+        }else if (Input.GetKeyUp(KeyCode.S))
+        {
+            Sd = false;
+
+            //å½“èµ·èº«ç¬é—´ï¼Œåˆšä½“è½®å»“çš„æ•°å€¼å˜æ¢
+            cc.offset = setOffsetUp;
+            cc.size = setSizeUp;
+        }
+        if (Sd == false)
+        {
+            anim.SetBool("squatDown", false);
+        }
+        if (Sd == true)
+        {
+            anim.SetBool("squatDown", true);
+        }
+        #endregion
+
+       
+        
+
+    }
+
+    public void PlayerHurt()
+    {
+        anim.SetTrigger("Hurt");
+    }
+
+
+
+    //æ”»å‡»åŠ¨ç”»
     public void PlayerAttack()
     {
         anim.SetTrigger("Attack");
     }
 
+    //è§¦å¢™æ»‘è½åŠ¨ç”»
     public void PlayerClimb()
     {
         anim.SetTrigger("Climb");
     }
+
+    public void PlayerGlissade()
+    {
+        anim.SetTrigger("Glissade");
+    }
+
 }

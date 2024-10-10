@@ -19,8 +19,9 @@ public class HurtAnimation : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.GetComponent<PlayerController>().IsHurt = false;
-        animator.GetComponent<PlayerController>().IsDead = false;
+        //获取动画里面isHurt的组件，把它改为false（不被勾选状态）
+        animator.GetComponent<PlayerController>().isHurt = false;
+        Debug.Log("false");
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

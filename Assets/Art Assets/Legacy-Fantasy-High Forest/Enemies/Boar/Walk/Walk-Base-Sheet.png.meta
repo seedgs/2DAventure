@@ -137,8 +137,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8df38744956ae5f4ea3fe0b4d01ef7cd
-      internalID: 2081636010
+      spriteID: a7d6f334c46ac4250bf97132f6956960
+      internalID: 1455296177
       vertices: []
       indices: 
       edges: []
@@ -158,8 +158,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 71693fc43fcc4c54baf84357c3829a04
-      internalID: -449493749
+      spriteID: 616ff100e719a45ac9b31b739114c83f
+      internalID: -1826151595
       vertices: []
       indices: 
       edges: []
@@ -179,8 +179,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cb2823f6392a46a4bb1f3a01188d9aff
-      internalID: 1964365321
+      spriteID: fa3d598676ee44ba0aba4aefa0764acc
+      internalID: -1734663794
       vertices: []
       indices: 
       edges: []
@@ -200,8 +200,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 06a6ccb465edd17458b3f4bcd9c069e3
-      internalID: 1025829474
+      spriteID: 5091aa9e0e757406b9f17d0c88cc6e25
+      internalID: -284618826
       vertices: []
       indices: 
       edges: []
@@ -221,8 +221,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c1c1ba0efd2f8f047a93fb8a8e22329e
-      internalID: -1828376680
+      spriteID: 207c1df930d674d16b06171b232dca55
+      internalID: -1383859867
       vertices: []
       indices: 
       edges: []
@@ -242,8 +242,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 89dd8cb1c42c09d4781552b76fa9de39
-      internalID: 1708335089
+      spriteID: faaa97f1ec2a24b4b9589db2c73b146f
+      internalID: -1207754538
       vertices: []
       indices: 
       edges: []
@@ -259,12 +259,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Walk-Base-Sheet_0: 2081636010
-      Walk-Base-Sheet_1: -449493749
-      Walk-Base-Sheet_2: 1964365321
-      Walk-Base-Sheet_3: 1025829474
-      Walk-Base-Sheet_4: -1828376680
-      Walk-Base-Sheet_5: 1708335089
+      Walk-Base-Sheet_0: 1455296177
+      Walk-Base-Sheet_1: -1826151595
+      Walk-Base-Sheet_2: -1734663794
+      Walk-Base-Sheet_3: -284618826
+      Walk-Base-Sheet_4: -1383859867
+      Walk-Base-Sheet_5: -1207754538
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

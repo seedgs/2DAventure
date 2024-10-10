@@ -1,92 +1,113 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class Character : MonoBehaviour
 {
-    [Header("×î´óÑªÁ¿")]
+
+    private PlayerController pc;
+
+    [Header("åŸºæœ¬å‚æ•°")]
     public float maxHealth;
-    [Header("µ±Ç°ÑªÁ¿")]
+
     public float currentHealth;
-    [Header("ÎŞµĞÊ±¼ä")]
+
+    [Header("å—ä¼¤æ— æ•Œ")]
+    //æ— æ•ŒæŒç»­æ—¶é—´
+    //è¿™ä¸ªæ˜¯å¯ä»¥æ‰‹åŠ¨è¾“å…¥çš„
     public float invulnerableDuration;
 
+
+    //æ— æ•Œæ—¶çš„è®¡æ•°å™¨
     private float invulnerableCounter;
 
+    //æ— æ•Œçš„åˆ¤æ–­ï¼ˆå¸ƒå°”å€¼ï¼‰
     public bool invulnerable;
 
-    public UnityEvent<Transform> OntakeDamage;
+    //æŠŠEventäº‹ä»¶å†…çš„æ‰§è¡Œäº‹ä»¶æ³¨å†Œåˆ°OnTakeTrumaé‡Œé¢å»äº†
+    public UnityEvent<Transform> OnTakeTruma;
 
-    public UnityEvent OnDead;
-
-    //Awake()ÎªÒ»¸öÉúÃüÖÜÆÚÖ»Ö´ĞĞÒ»´Î
-    //Èç¹ûÈËÎïÖØÉú£¬ÈËÎïµÄbuffer¾Í»áµş¼Ó£¬ÒòÎªÖØÉúÖ»ÓĞÒ»´Î£¬ËùÒÔµşbufferÒ²¾ÍÖ»ÓĞÓĞÒ»´Î
+    public UnityEvent osDeath;
 
 
 
-
-    //¶ÔÏó·¢ÉúÊ±ºò¿ªÊ¼Ö´ĞĞ
-    //ÕâÀïÊÇÈËÎïÓëÒ°Öí·¢ÉúÅö×²µÄÊ±ºò¿ªÊ¼Ö´ĞĞ
-    //Õâ¸ö·¢Éú¿ÉÒÔÊÇ¶à´Î
     private void Start()
     {
-        //µ±Ç°ÑªÁ¿¾ÍÊÇ×î´óÑªÁ¿
+        //æ¸¸æˆä¸€å¼€å§‹çš„æ—¶å€™ç©å®¶éƒ½æ˜¯æ»¡è¡€çŠ¶æ€çš„
         currentHealth = maxHealth;
+
     }
 
-
-    //Ã¿Ò»Ö¡¶¼ĞèÒªÖ´ĞĞÕâ¸ö¼ÆÊıÆ÷µ¹¼ÆÊ±
+    //Updateæ¯æ¬¡æ£€æµ‹
     private void Update()
     {
-        //µ±ÎŞµĞµÄÊ±ºò
-        if (invulnerable)
+        //å¼€å§‹è®¡æ•°ï¼ˆå€’è®¡æ—¶ï¼‰
+        invulnerableCounter -= Time.deltaTime;
+        //å½“å€’è®¡æ—¶ä¸º0çš„æ—¶å€™
+        if (invulnerableCounter <= 0)
         {
-            //¼ÆÊıÆ÷¿ªÊ¼µ¹¼ÆÊ±
-            invulnerableCounter -= Time.deltaTime;
-            //µ±¼ÆÊıÆ÷Îª0µÄÊ±ºò
-            if (invulnerableCounter <= 0)
-            {
-                //ÎŞµĞÍ£Ö¹
-                invulnerable = false;
-            }
+            //æ— æ•Œå¼€å…³é—­ä¸Šï¼ˆä¸æ‰“é’©ï¼‰
+            invulnerable = false;
         }
+
+        pc = GetComponent<PlayerController>();
     }
 
-    //ÕâÀï£¨£©ÄÚÊÇ»ñÈ¡Attack½Å±¾µÄ²ÎÊı£¬²¢ÃüÃûÎªattacker
-    public void TakeDamage(Attack attacker)
+    //()é‡Œé¢Attackæ˜¯Attackè„šæœ¬çš„å‘½åï¼Œattackeræ˜¯è‡ªå·±å‘½åçš„
+    public void takeTrauma(Attack attacker)
     {
-       
-
+        //å¦‚æœæ— æ•Œçš„æ—¶å€™ï¼Œä¸æ‰§è¡Œä¸‹é¢çš„æ‰£è¡€ä¼¤å®³
+        //æˆ–è€…å½“äººç‰©æ»‘é“²çŠ¶æ€ä¸‹ï¼Œä¹Ÿä¸æ‰§è¡Œä¸‹é¢çš„æ‰£è¡€ä¼¤å®³
+        //ä¸æ‰§è¡Œçš„è¯å°±è¿”å›åˆ°Updateä¸Šé¢ç”±å¤´æ‰§è¡Œ
+        //()ä¸ºinvulnerable = true
         if (invulnerable)
             return;
 
-        if (currentHealth > 0)
+
+        //æ‰“å°Attack(è¿™é‡Œå·²ç”¨attackeræ‰¿è½½)çš„traumaçš„æ•°å€¼
+        //Debug.Log(attacker.trauma);
+
+        //å½“äººç‰©å—ä¼¤åï¼Œæ•°å€¼ä¸ä¸ºè´Ÿï¼Œä¸”ä¸ä¸º0ï¼Œå¯ä»¥ç»§ç»­æ‰§è¡Œæ‰£è¡€å¤„ç†
+        if (currentHealth - attacker.trauma > 0)
         {
-            //Debug.Log(attacker.attackDamage);
-            currentHealth -= attacker.attackDamage;
-            OnTriggerInvlnerable();
-            OntakeDamage?.Invoke(attacker.transform);
+            //è¡€é‡ç­‰äºä¸¤ä¸ªç‰©ä½“ç¢°æ’åï¼Œå½“å‰è¡€é‡ - æ”¶åˆ°çš„ä¼¤å®³çš„æ•°å€¼ 
+            currentHealth -= attacker.trauma;
+
+            //å½“ä¸Šé¢æ‰£è¡€çš„æ—¶å€™ï¼Œæ‰§è¡Œæ–¹æ³• TriggerInvulnerAble()
+            TriggerInvulnerAble();
+
+            //å—ä¼¤æ‰§è¡Œ
+            //æˆ‘ä»¬è¦åˆ¤æ–­æ˜¯å¦æœ‰æ–¹æ³•æ·»åŠ è¿›æ¥ï¼Œæ‰€ä»¥åœ¨åé¢æ·»åŠ ?
+            //Invokeæ˜¯æ‰§è¡Œæ–¹æ³•
+            //attacker.transformæ˜¯UnityEventæ‹¬å·å†…çš„å‚æ•°ï¼Œå‚æ•°å¡«å†™è¿™é‡Œå°±éœ€è¦å¡«å†™
+            //å› ä¸ºä¸Šé¢å‚æ•°æ˜¯transformï¼Œæ‰€ä»¥ä¸‹é¢çš„å‚æ•°æ˜¯éœ€è¦ç¢°æ’çš„ç‰©ä½“çš„transform
+            OnTakeTruma?.Invoke(attacker.transform);
+            //Debug.Log(attacker.name);
+
         }
-        else 
+        //å¦åˆ™ï¼Œäººç‰©è¡€é‡ç›´æ¥ä¸º0
+        else if (currentHealth - attacker.trauma <= 0)
         {
+            //äººç‰©æ­»äº¡
             currentHealth = 0;
-            //ËÀÍö
-            OnDead?.Invoke();
+            osDeath?.Invoke();
         }
-        
+
+
     }
 
 
-    public void OnTriggerInvlnerable()
+    private void TriggerInvulnerAble()
     {
-        if (!invulnerable)
-        {
-            invulnerable = true;
-            invulnerableCounter = invulnerableDuration;
-        }
+        //æ— æ•Œçš„å¸ƒå°”å€¼æ‰“å¼€ï¼ˆæ‰“é’©ï¼‰
+        invulnerable = true;
+
+        //æ— æ•Œçš„æŒç»­æ—¶é—´ ç­‰äº è®¤ä¸ºè®¾å®šçš„æ— æ•Œæ—¶é—´
+        invulnerableCounter = invulnerableDuration;
+
+
     }
 
- 
+
 }

@@ -137,8 +137,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c286be8cf8e816e4daae35c89d12a303
-      internalID: -954074325
+      spriteID: 8a08e69b3b8df4e2086259fba6ffebc1
+      internalID: 1536050969
       vertices: []
       indices: 
       edges: []
@@ -158,8 +158,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f3138c7a29e72744187d5e2c0ae3041d
-      internalID: -1751580644
+      spriteID: 206e71d86ecfc4c90b9dbf43bde55cfe
+      internalID: -2090000233
       vertices: []
       indices: 
       edges: []
@@ -179,8 +179,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 105cae6363aefe24bb5979545a627cbe
-      internalID: 1852511185
+      spriteID: 0141a4deacbe64168b6a4013bf877037
+      internalID: -1941372135
       vertices: []
       indices: 
       edges: []
@@ -200,8 +200,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c90ce26495d029f4fbaf4d017d02ee27
-      internalID: 1850604385
+      spriteID: 9765b050a32b349aa8f71f007b863a8f
+      internalID: -822882190
       vertices: []
       indices: 
       edges: []
@@ -221,8 +221,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e9283cbc15b6046428d6ebadbd1fc4b9
-      internalID: 1185602574
+      spriteID: 3915113b462194ef2be1b70bf825626e
+      internalID: -736530290
       vertices: []
       indices: 
       edges: []
@@ -242,8 +242,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 306919ba30c521c458d8d725de393547
-      internalID: 803179248
+      spriteID: 8e324d8db02fa410881967edb86e68b3
+      internalID: -668915928
       vertices: []
       indices: 
       edges: []
@@ -259,12 +259,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Run-Sheet_0: -954074325
-      Run-Sheet_1: -1751580644
-      Run-Sheet_2: 1852511185
-      Run-Sheet_3: 1850604385
-      Run-Sheet_4: 1185602574
-      Run-Sheet_5: 803179248
+      Run-Sheet_0: 1536050969
+      Run-Sheet_1: -2090000233
+      Run-Sheet_2: -1941372135
+      Run-Sheet_3: -822882190
+      Run-Sheet_4: -736530290
+      Run-Sheet_5: -668915928
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
