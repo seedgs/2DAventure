@@ -21,6 +21,8 @@ public class EnemyController : MonoBehaviour
 
     [HideInInspector] private EnemyRightPhysicsCheck erpc;
 
+    [HideInInspector] private EnemyRunPhysicsCheck eupc;
+
 
     [Header("正常巡逻速度")]
     public float normalSpeed;
@@ -37,17 +39,13 @@ public class EnemyController : MonoBehaviour
     [Header("奔跑时间")]
     public float continueRunTime;
 
-    [Header("左等待时间")]
-    public float waitLeftTime;
+    [Header("当前设置时间")]
+    public float CurrentWaitTime;
 
-    [Header("左转向后等待时间")]
-    public float waitAfterLeftTime;
+    [Header("正常等待时间")]
+    public float NormalWaitTime;
 
-    [Header("右等待时间")]
-    public float waitRightTime;
 
-    [Header("右转向后等待时间")]
-    public float waitAfterRightTime;
 
     [HideInInspector] public Transform attacker;
 
@@ -91,6 +89,7 @@ public class EnemyController : MonoBehaviour
     [Header("当前不是右等待状态")]
     public bool isNotRightWait;
 
+
     //public bool isRetreat;
 
     public void Update()
@@ -104,9 +103,8 @@ public class EnemyController : MonoBehaviour
         //    boarAgainAttack();
         //}
 
-
+        
     }
-
 
 
     //一进入游戏就能执行代码 
@@ -143,6 +141,8 @@ public class EnemyController : MonoBehaviour
 
         erpc = GetComponent<EnemyRightPhysicsCheck>();
 
+        eupc = GetComponent<EnemyRunPhysicsCheck>();
+
         currentSpeed = normalSpeed;
 
         
@@ -166,7 +166,7 @@ public class EnemyController : MonoBehaviour
     {
         patrolState.LogicUpdate();
         isWalk = true;
-        transform.GetComponentInChildren<EdgeCollider2D>().enabled = true;
+        //transform.GetComponentInChildren<EdgeCollider2D>().enabled = true;
         //NoRun();
         //currentState.PhysicsUpdate();
         
@@ -174,12 +174,10 @@ public class EnemyController : MonoBehaviour
 
 
 
-
     public void OnDsiable()
     {
         currentState.OnExit();
     }
-
 
 
     //移动
@@ -195,13 +193,12 @@ public class EnemyController : MonoBehaviour
     public virtual void move()
     {
 
-        if (!isHurt && !isDead && elpc.isLeftGround == true && erpc.isRightGround ==true ) {
+        if (!isHurt && !isDead && elpc.isLeftGround == true && erpc.isRightGround == true) {
 
             rb.velocity = new Vector2(faceDir.x * currentSpeed * Time.deltaTime, 0);
             
         }
 
-       
     }
 
 
@@ -214,29 +211,31 @@ public class EnemyController : MonoBehaviour
         {
             isNotLeftWait = true;
 
-            Debug.Log("LeftMove");
+            //Debug.Log("LeftMove");
         }
+
+        
+
         if (elpc.isLeftGround == false) //当野猪与地面的碰撞检测的isGround值为false时，野猪速度的waitSpeed为0
         {
             isNotLeftWait = false;
 
-            waitLeftTime -= Time.deltaTime;
-            
-            rb.velocity = new Vector2(faceDir.x * waitSpeed * Time.deltaTime * waitLeftTime, 0);
+            CurrentWaitTime -= Time.deltaTime;
 
-            if (waitLeftTime <= 0)
+            rb.velocity = new Vector2(faceDir.x * waitSpeed * Time.deltaTime * CurrentWaitTime, 0);
+
+            if (CurrentWaitTime <= 0)
             {
 
                 transform.localScale = new Vector3(-1, 1, 1);
 
+                CurrentWaitTime = NormalWaitTime;
+
                 rb.velocity = new Vector2(faceDir.x * currentSpeed * Time.deltaTime, 0);
 
-                //waitLeftTime = 1;
-
-                waitLeftTime = waitAfterLeftTime;
             }
             
-            Debug.Log("NotLeftMove");
+            //Debug.Log("NotLeftMove");
         }
 
 
@@ -245,29 +244,29 @@ public class EnemyController : MonoBehaviour
         {
             isNotRightWait = true;
 
-            Debug.Log("RightMove");
+            //Debug.Log("RightMove");
         }
         if (erpc.isRightGround == false) //当野猪与地面的碰撞检测的isGround值为false时，野猪速度的waitSpeed为0
         {
             isNotRightWait = false;
 
-            waitRightTime -= Time.deltaTime;
+            CurrentWaitTime -= Time.deltaTime;
 
-            rb.velocity = new Vector2(faceDir.x * waitSpeed * Time.deltaTime * waitRightTime, 0);
+            rb.velocity = new Vector2(faceDir.x * waitSpeed * Time.deltaTime * CurrentWaitTime, 0);
 
-            if (waitRightTime <= 0)
+            if (CurrentWaitTime <= 0)
             {
 
                 transform.localScale = new Vector3(1, 1, 1);
 
+                CurrentWaitTime = NormalWaitTime;
+
                 rb.velocity = new Vector2(faceDir.x * currentSpeed * Time.deltaTime, 0);
 
-                //waitRightTime = 1;
 
-                waitRightTime = waitAfterRightTime;
             }
             
-            Debug.Log("NotRightMove");
+            //Debug.Log("NotRightMove");
         }
     }
 
@@ -285,19 +284,24 @@ public class EnemyController : MonoBehaviour
     public virtual void Run()
     {
 
+        if (eupc.isRunCheck == true)
+        {
+            isRun = true;
 
+            isNotLeftWait = false;
 
+            isNotRightWait = false;
+
+            currentSpeed = normalSpeed * 3;
+
+            //CurrentWaitTime = 0;
+        }
 
         //当玩家进入敌人（可能是一个区域）的视野，触发下面条件
-        isRun = true;
-        currentSpeed = normalSpeed * 3;
-
-
-
 
 
         //人物进入野猪视野范围后，关闭碰撞组件
-        transform.GetComponentInChildren<EdgeCollider2D>().enabled = false;
+
         //player.GetComponentInChildren<BoxCollider2D>().enabled = false;
 
 
@@ -305,19 +309,23 @@ public class EnemyController : MonoBehaviour
 
         //当地然奔跑至预设时间后，敌人停止奔跑恢复原来巡逻状态
 
-        continueRunTime -= Time.deltaTime;
 
-        if (continueRunTime <= 0)
+        if (eupc.isRunCheck == false)
         {
+            Debug.Log("NotRun");
+
             isRun = false;
+
             currentSpeed = normalSpeed;
-            
+
+            continueRunTime = 2;
+
+           //CurrentWaitTime = NormalWaitTime;
+
         }
 
-
-        runState.LogicUpdate();
-
     }
+
 
 
 
@@ -330,7 +338,6 @@ public class EnemyController : MonoBehaviour
     //transform.GetComponentInChildren<EdgeCollider2D>()
     //当野猪的视野范围重新打开的时候，此时的人物已经离开野猪的视野范围，野猪停止蹦跑
     #endregion
-
 
 
 
@@ -365,6 +372,7 @@ public class EnemyController : MonoBehaviour
         //受伤被击退
         #region
         isHurt = true;
+
         anim.SetTrigger("Hurt");
 
         Vector2 Dir = new Vector2(transform.position.x - attacktrans.position.x, 0).normalized;
@@ -393,6 +401,7 @@ public class EnemyController : MonoBehaviour
         //以下固定顺序yield return null;  ruturn后面必须有值，可以是null，null的意思是执行完上一帧就直接执行下一帧
         //new waitForSecond(0.45f)意思是执行括号内的固定秒数后代码再往下执行，相当于延迟器
         yield return new WaitForSeconds(0.4f);
+
         isHurt = false;
     }
     #endregion
@@ -409,10 +418,12 @@ public class EnemyController : MonoBehaviour
             //当执行死亡动画的时候，野猪马上切换碰撞图层，该图层已经设置为不与玩家（角色）残生碰撞
             //layer的设置，(寻找路径)edit --> project setting --> physics 2D --> Layerer Collision Matrix
 
-
             isDead = true;
+
             anim.SetBool("Dead",isDead);
+
             Debug.Log("Dead");
+
         }
     }
 
@@ -445,22 +456,49 @@ public class EnemyController : MonoBehaviour
     {
         if (collision.name == "Bg_Rock_Left")
         {
-            transform.localScale = new Vector3(-1, 1, 1);
-            ////野猪退后
-            //isRetreat = false;
+            isNotLeftWait = false;
+
+            rb.velocity = new Vector2(faceDir.x * waitSpeed * Time.deltaTime * CurrentWaitTime, 0);
+
+            CurrentWaitTime -= Time.deltaTime;
+
+            if (CurrentWaitTime <= 0)
+            {
+
+                transform.localScale = new Vector3(-1, 1, 1);
+
+                rb.velocity = new Vector2(faceDir.x * currentSpeed * Time.deltaTime, 0);
+
+                CurrentWaitTime = NormalWaitTime;
+
+            }
+
+
         }
 
         if (collision.name == "Bg_Rock_Right")
         {
-            transform.localScale = new Vector3(1, 1, 1);
-            ////野猪退后
-            //isRetreat = false;
+            isNotRightWait = false;
+
+            rb.velocity = new Vector2(faceDir.x * waitSpeed * Time.deltaTime * CurrentWaitTime, 0);
+
+            CurrentWaitTime -= Time.deltaTime;
+
+            if (CurrentWaitTime <= 0)
+            {
+
+                transform.localScale = new Vector3(1, 1, 1);
+
+                rb.velocity = new Vector2(faceDir.x * currentSpeed * Time.deltaTime, 0);
+
+                CurrentWaitTime = NormalWaitTime;
+
+            }
+
         }
 
     }
     #endregion
 
-
-    
 
 }

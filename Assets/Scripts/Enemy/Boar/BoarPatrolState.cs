@@ -25,12 +25,19 @@ public class BoarPatrolState : BaseState
 
         //当野猪的isGround为0，也就是野猪遇到悬崖的时候，野猪停止巡逻，进入等待模式
         //启动左边等待
+        
         currentEnemy.anim.SetBool("isLeftGround", currentEnemy.isNotLeftWait);
         currentEnemy.wait();
+
 
         //启动右边等待
         currentEnemy.anim.SetBool("isRightGround", currentEnemy.isNotRightWait);
         currentEnemy.wait();
+
+
+        //启动奔跑动画
+        currentEnemy.anim.SetBool("isRun", currentEnemy.isRun);
+        currentEnemy.Run();
     }
 
 

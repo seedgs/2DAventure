@@ -14,9 +14,8 @@ public class BoarRunState : BaseState
     public override void LogicUpdate()
     {
         //base.currentEnemy.Run();
-        currentEnemy.anim.SetBool("isRun", currentEnemy.isRun);
-        currentEnemy.anim.SetTrigger("Run");
-        
+
+        //currentEnemy.Run();
     }
 
     

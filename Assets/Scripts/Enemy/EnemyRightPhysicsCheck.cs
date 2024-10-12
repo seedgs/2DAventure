@@ -10,7 +10,7 @@ public class EnemyRightPhysicsCheck : MonoBehaviour
     [Header("ÓÒÅö×²°ë¾¶")]
     public float CheckRightRadius;
 
-    [Header("ÓÒÅö×²°ë¾¶")]
+    [Header("Ñ¡ÔñÅö×²Í¼²ã")]
     public LayerMask GroundRightlayer;
 
     [Header("ÓÒÅö×²ÅĞ¶¨")]
