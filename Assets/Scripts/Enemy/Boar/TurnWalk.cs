@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GlissadeFinish : StateMachineBehaviour
+public class TurnWalk : StateMachineBehaviour
 {
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -16,13 +16,18 @@ public class GlissadeFinish : StateMachineBehaviour
     //    
     //}
 
-    //OnStateExit is called when a transition ends and the state machine finishes evaluating this state
+    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.GetComponent<PlayerController>().isGlissade = false;
-        
+
+        animator.GetComponent<EnemyController>().transform.localScale = new Vector3(-animator.GetComponent<EnemyController>().transform.localScale.x, 1, 1);
+
+        animator.GetComponent<EnemyController>().currentSpeed = animator.GetComponent<EnemyController>().normalSpeed;
+
+        animator.GetComponent<EnemyController>().isWall = false;
+
     }
- 
+
     // OnStateMove is called right after Animator.OnAnimatorMove()
     //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     //{

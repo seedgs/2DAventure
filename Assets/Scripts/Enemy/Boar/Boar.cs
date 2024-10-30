@@ -14,7 +14,8 @@ public class Boar : EnemyController
         //new一个野猪的巡逻模式出来，也可以理解为创建一个野猪巡逻模式
         patrolState = new BoarPatrolState();
 
-        runState = new BoarRunState();
+        //new一个追击模式
+        chaseState = new BoarChaseState();
     }
 
     

@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Unity.VisualScripting;
 using UnityEngine;
-
+using Debug = UnityEngine.Debug;
 
 public class EnemyController : MonoBehaviour
 {
@@ -24,8 +26,12 @@ public class EnemyController : MonoBehaviour
     [HideInInspector] private EnemyRunPhysicsCheck eupc;
 
 
+
     [Header("正常巡逻速度")]
     public float normalSpeed;
+
+    [Header("奔跑速度")]
+    public float chaseSpeed;
 
     [Header("当前速度")]
     public float currentSpeed;
@@ -36,6 +42,13 @@ public class EnemyController : MonoBehaviour
     [Header("受伤时反向力")]
     public float hurtForce;
 
+    [HideInInspector] public bool collisionLeft;
+
+    [HideInInspector] public bool collisionRight;
+
+
+
+
     [Header("奔跑时间")]
     public float continueRunTime;
 
@@ -45,9 +58,17 @@ public class EnemyController : MonoBehaviour
     [Header("正常等待时间")]
     public float NormalWaitTime;
 
+    public float lostTime;
+
+    public float lostTimeCounter;
+
+    public float totalCollisionWallTime = 2;
 
 
-    [HideInInspector] public Transform attacker;
+
+    //当野猪进入某一个状态，且丢失了玩家的
+    //attacker就是用来检测是否丢失玩家的
+    public Transform attacker;
 
     [HideInInspector] public Vector3 facdir;
 
@@ -89,6 +110,28 @@ public class EnemyController : MonoBehaviour
     [Header("当前不是右等待状态")]
     public bool isNotRightWait;
 
+    public bool isWall;
+
+
+    [Header("CheckPlayerBoxCast检测数值")]
+    public Vector2 checkPlayerCenterOffset;
+
+    public Vector2 checkPlayerCheckSize;
+
+    public float checkPlayerCheckDistance;
+
+    public LayerMask checkPlayerAttackLayer;
+
+
+    [Header("CheckWallBoxCast检测数值")]
+    public Vector2 checkWallCenterOffset;
+
+    public Vector2 checkWallCheckSize;
+
+    public float checkWallCheckDistance;
+
+    public LayerMask checkWallAttackLayer;
+
 
     //public bool isRetreat;
 
@@ -103,7 +146,13 @@ public class EnemyController : MonoBehaviour
         //    boarAgainAttack();
         //}
 
-        
+
+
+        lostPlayer();
+
+        currentState.LogicUpdate();
+
+
     }
 
 
@@ -119,9 +168,13 @@ public class EnemyController : MonoBehaviour
         //所有在这个状态一开始的时候就执行“当前”状态
         //当绑定状态机传参后，这里需要“this”来传参，否则会报错
         //currentState.OnEnter(this);
+
+
+        //lostPlayer();
+
         patrolState.OnEnter(this);
 
-        runState.OnEnter(this);
+
     }
 
 
@@ -142,6 +195,8 @@ public class EnemyController : MonoBehaviour
         erpc = GetComponent<EnemyRightPhysicsCheck>();
 
         eupc = GetComponent<EnemyRunPhysicsCheck>();
+
+
 
         currentSpeed = normalSpeed;
 
@@ -164,12 +219,21 @@ public class EnemyController : MonoBehaviour
 
     public void FixedUpdate()
     {
-        patrolState.LogicUpdate();
-        isWalk = true;
+
+
+        //patrolState.LogicUpdate();
+
+        //chaseState.LogicUpdate();
+
         //transform.GetComponentInChildren<EdgeCollider2D>().enabled = true;
         //NoRun();
-        //currentState.PhysicsUpdate();
+
+        patrolState.LogicUpdate();
+
+        isWall = false;
         
+        //chaseState.LogicUpdate();
+
     }
 
 
@@ -189,7 +253,7 @@ public class EnemyController : MonoBehaviour
     //所以野猪的移动，需要野猪的RigidBody2D组件中的Info里面的Velocity的 X 为 1 的时候，野猪移动
     //人过需要让野猪移动速度快一点，需要在Velocity的x上添加一个自定义的floot参数，修改这个参数就可以增减速度
     //野猪的Velocity的y向速度为0（也就原来的Velocity的y向速度）
-    #endregion
+   
     public virtual void move()
     {
 
@@ -200,9 +264,11 @@ public class EnemyController : MonoBehaviour
         }
 
     }
+    #endregion
 
 
     //站立（无其他动作）
+     #region
     public virtual void wait()
     {
 
@@ -211,11 +277,9 @@ public class EnemyController : MonoBehaviour
         {
             isNotLeftWait = true;
 
+            //CurrentWaitTime = NormalWaitTime;
             //Debug.Log("LeftMove");
         }
-
-        
-
         if (elpc.isLeftGround == false) //当野猪与地面的碰撞检测的isGround值为false时，野猪速度的waitSpeed为0
         {
             isNotLeftWait = false;
@@ -229,14 +293,15 @@ public class EnemyController : MonoBehaviour
 
                 transform.localScale = new Vector3(-1, 1, 1);
 
-                CurrentWaitTime = NormalWaitTime;
 
                 rb.velocity = new Vector2(faceDir.x * currentSpeed * Time.deltaTime, 0);
-
+                
             }
+
             
             //Debug.Log("NotLeftMove");
         }
+
 
 
         //右边监测点
@@ -244,6 +309,7 @@ public class EnemyController : MonoBehaviour
         {
             isNotRightWait = true;
 
+            //CurrentWaitTime = NormalWaitTime;
             //Debug.Log("RightMove");
         }
         if (erpc.isRightGround == false) //当野猪与地面的碰撞检测的isGround值为false时，野猪速度的waitSpeed为0
@@ -254,92 +320,37 @@ public class EnemyController : MonoBehaviour
 
             rb.velocity = new Vector2(faceDir.x * waitSpeed * Time.deltaTime * CurrentWaitTime, 0);
 
+            
             if (CurrentWaitTime <= 0)
             {
 
                 transform.localScale = new Vector3(1, 1, 1);
 
-                CurrentWaitTime = NormalWaitTime;
 
                 rb.velocity = new Vector2(faceDir.x * currentSpeed * Time.deltaTime, 0);
-
-
+                
             }
-            
+
             //Debug.Log("NotRightMove");
         }
+        if(isNotLeftWait && isNotRightWait)
+        {
+            CurrentWaitTime = NormalWaitTime;
+        }
     }
-
-
-    //奔跑
-    #region
-
-    //方法注释
-    //人物进入野猪视野范围的时候，野猪开始 “加速”冲向人物
-    //由于野猪视野的检测机制也是沿用碰撞机制
-    //所以如果野猪一旦进入奔跑模式的 “瞬间” 不关闭野猪视野组件
-    //人物就会触发受伤机制
-    //所以野猪开启蹦跑的一瞬间，视野检测组件就会关闭
     #endregion
-    public virtual void Run()
-    {
-
-        if (eupc.isRunCheck == true)
-        {
-            isRun = true;
-
-            isNotLeftWait = false;
-
-            isNotRightWait = false;
-
-            currentSpeed = normalSpeed * 3;
-
-            //CurrentWaitTime = 0;
-        }
-
-        //当玩家进入敌人（可能是一个区域）的视野，触发下面条件
-
-
-        //人物进入野猪视野范围后，关闭碰撞组件
-
-        //player.GetComponentInChildren<BoxCollider2D>().enabled = false;
-
-
-        //拓展：当玩家离开敌人（可能是一个区域）的视野，触发下面条件
-
-        //当地然奔跑至预设时间后，敌人停止奔跑恢复原来巡逻状态
-
-
-        if (eupc.isRunCheck == false)
-        {
-            Debug.Log("NotRun");
-
-            isRun = false;
-
-            currentSpeed = normalSpeed;
-
-            continueRunTime = 2;
-
-           //CurrentWaitTime = NormalWaitTime;
-
-        }
-
-    }
 
 
 
 
-
-    //停止奔跑
+    //受伤
     #region
 
     //方法注释
     //以下是野猪的视线范围的组件，true为打开，false为关闭
     //transform.GetComponentInChildren<EdgeCollider2D>()
     //当野猪的视野范围重新打开的时候，此时的人物已经离开野猪的视野范围，野猪停止蹦跑
-    #endregion
-
-
+    
 
     public void onTakeTruma(Transform attacktrans)
     {
@@ -352,7 +363,7 @@ public class EnemyController : MonoBehaviour
         //人物在野猪的左侧
         //人物x坐标数值永远比野猪x坐标数值要小，所以他们的差值永远小于0
         //此时需要野猪朝着人物（左侧）方面转过来
-        if (attacktrans.position.x -transform.position.x < 0)
+        if (attacktrans.position.x - transform.position.x < 0)
         {
             transform.localScale = new Vector3(1, 1, 1);
         }
@@ -377,11 +388,17 @@ public class EnemyController : MonoBehaviour
 
         Vector2 Dir = new Vector2(transform.position.x - attacktrans.position.x, 0).normalized;
 
-        //固定写法，执行下面的协同器StartCoroutine(协同器函数名以及传参)
+
+        //当玩家在敌人任何状态下攻击时，敌人都会受到这个后退的力
+        rb.velocity = new Vector2(0, rb.velocity.y);
+
+        //固定写法，执行下面的协同器S  tartCoroutine(协同器函数名以及传参)
         StartCoroutine(onHurt(Dir));
 
         #endregion
     }
+    #endregion
+
 
 
     //协程
@@ -409,6 +426,7 @@ public class EnemyController : MonoBehaviour
 
 
     //执行死亡动画
+    #region
     public void onDead()
     {
         
@@ -422,7 +440,6 @@ public class EnemyController : MonoBehaviour
 
             anim.SetBool("Dead",isDead);
 
-            Debug.Log("Dead");
 
         }
     }
@@ -442,63 +459,128 @@ public class EnemyController : MonoBehaviour
     {
         Destroy(this.gameObject);
     }*/
+    #endregion
 
 
 
-    //敌人撞墙后反转
+    //遇到空气墙时的各种状态
     #region
-    //方法注释
-
-    //当野猪与墙面发生碰撞时
-    //根据墙面碰撞的左右来判断野猪转向
-    
-    private void OnTriggerStay2D(Collider2D collision)
+    public void OnTriggerEnter2D(Collider2D collision)
     {
+        if(collision.name == "Bg_Rock_Left" || collision.name == "Bg_Rock_Right")
+        {
+            isWall = true;
+            currentSpeed = waitSpeed;
+
+            CurrentWaitTime = 0;
+        }
+
         if (collision.name == "Bg_Rock_Left")
         {
-            isNotLeftWait = false;
-
-            rb.velocity = new Vector2(faceDir.x * waitSpeed * Time.deltaTime * CurrentWaitTime, 0);
-
-            CurrentWaitTime -= Time.deltaTime;
-
-            if (CurrentWaitTime <= 0)
-            {
-
-                transform.localScale = new Vector3(-1, 1, 1);
-
-                rb.velocity = new Vector2(faceDir.x * currentSpeed * Time.deltaTime, 0);
-
-                CurrentWaitTime = NormalWaitTime;
-
-            }
-
-
+            collisionLeft = true;
+        }
+        else
+        {
+            collisionLeft = false;
         }
 
         if (collision.name == "Bg_Rock_Right")
         {
-            isNotRightWait = false;
-
-            rb.velocity = new Vector2(faceDir.x * waitSpeed * Time.deltaTime * CurrentWaitTime, 0);
-
-            CurrentWaitTime -= Time.deltaTime;
-
-            if (CurrentWaitTime <= 0)
-            {
-
-                transform.localScale = new Vector3(1, 1, 1);
-
-                rb.velocity = new Vector2(faceDir.x * currentSpeed * Time.deltaTime, 0);
-
-                CurrentWaitTime = NormalWaitTime;
-
-            }
-
+            collisionRight = true;
+        }
+        else
+        {
+            collisionRight = false;
         }
 
     }
     #endregion
 
 
+    //敌人丢失玩家后，多久恢复以前状态
+    #region
+    public void lostPlayer()
+    {
+        
+        if (!FoundPlayer() && lostTimeCounter > 0)
+        {
+            //Debug.Log("lostTimeCounter_star_reduce");
+
+            lostTimeCounter -= Time.deltaTime;
+
+        }
+
+    }
+
+    #endregion
+
+
+
+    //检测玩家
+    #region
+    //BoxCast方法检测敌人
+    //BoxCast就是朝特定方向拖动一个 “盒体” 穿过场景，可以检测并报告与“盒体”接触的对象
+    //例子：在敌人身上用boxcast，敌人身上就会有一个“盒体”。敌人移动，“盒体”也会跟随移动。当其他物体碰撞到这个“盒体”的时候，就会报告碰撞的是什么。
+
+    //Boxcast里面的参数
+    //origin： 盒体在2D空间的起点
+    //size：盒体大小
+    //angle：盒体的角度
+    //direction：盒体方向的矢量（朝哪个方向）
+    //distance：盒体最大的投射距离
+    //layerMask：过滤器，用于尽在特定层上检测碰撞体
+    //minDepth：Z坐标大于或等于该值的对象
+    //maxDepth：Z坐标小于或等于该值的对象
+    public bool FoundPlayer() //返回布尔值，是否发现敌人
+    {
+        //当你不知道“return”返回的是什么值的时候，可以在前面改成“var...”
+        //例子：
+        //var what = Physics2D.BoxCast(transform.position + (Vector3)centerOffset, checkSize, 0, facdir, checkDistance, attackLayer);
+        //鼠标移进“var”就会有提示;
+
+
+
+        var checkPlayerCollision = Physics2D.BoxCast(transform.position + (Vector3)checkPlayerCenterOffset, checkPlayerCheckSize, 0, facdir, checkPlayerCheckDistance, checkPlayerAttackLayer);
+
+        return checkPlayerCollision;
+    }
+
+    #endregion
+
+
+    //敌人的状态转换
+    #region
+    public void SwitchState(NPCState state)
+    {
+        var newState = state switch
+        {
+            NPCState.Patrol => patrolState, //当判断为patrol的时候，切换到patrol状态
+
+            NPCState.Chase => chaseState, //当判断为chase的时候，切换到chase状态
+
+            _ => null //没有的话返回一个null
+        };
+
+        currentState.OnExit();  // 结束上一个状态
+
+        currentState = newState; // 切换状态
+
+        currentState.OnEnter(this); // 执行新的状态
+
+        
+    }
+    public void OnDrawGizmosSelected()
+    {
+        //经过测试上面的checkSize的x数值 与 checkDistance的x数值是“一半”的关系
+        //例：当设置checkDistance的x数值为3，此时屏幕的点就会移动，如果需要检测的点也是这里的话，checkSize的x数值设置成checkDistance的x的数值的一倍，也就是6
+        Gizmos.DrawWireSphere(transform.position + (Vector3)checkPlayerCenterOffset + new Vector3(checkPlayerCheckDistance * faceDir.x, 0), 0.2f);
+
+       
+    }
+
+    internal bool OnTriggerEnter2D()
+    {
+        throw new NotImplementedException();
+    }
+    #endregion
 }
